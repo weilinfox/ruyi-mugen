@@ -8,57 +8,60 @@
 # EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
 # MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 # See the Mulan PSL v2 for more details.
-####################################
-#@Author    	:   guochenyang
-#@Contact   	:   377012421@qq.com
-#@Date      	:   2020-10-10 09:30:43
-#@License   	:   Mulan PSL v2
-#@Desc      	:   verification ImageMagick‘s command
-#####################################
-source ${OET_PATH}/libs/locallibs/common_lib.sh
+# #############################################
+# @Author    :   wangshan
+# @Contact   :   wangshan@163.com
+# @Date      :   2020-10-15
+# @License   :   Mulan PSL v2
+# @Desc      :   pg_config
+# ############################################
+
+source ../common/lib.sh
+
 function pre_test() {
     LOG_INFO "Start to prepare the test environment."
-    DNF_INSTALL ImageMagick
-    cp -r ../common ../common1
-    cd ../common1
+    postgresql_install
     LOG_INFO "End to prepare the test environment."
 }
+
 function run_test() {
     LOG_INFO "Start to run test."
-    convert test2.jpg test2.png
+    pg_config --sharedir | grep "/usr/share/pgsql"
     CHECK_RESULT $?
-    test -f test2.png
+    pg_config --sysconfdir | grep "/etc"
     CHECK_RESULT $?
-    convert test2.png test2.bmp
+    pg_config --pgxs | grep "pgxs.mk"
     CHECK_RESULT $?
-    test -f test2.bmp
+    pg_config --configure | grep "build"
     CHECK_RESULT $?
-    convert test2.bmp test2.gif
+    pg_config --cc | grep "gcc"
     CHECK_RESULT $?
-    test -f test2.gif
+    pg_config --cppflags | grep "D_GNU_SOURCE"
     CHECK_RESULT $?
-    convert test2.gif test2.tiff
+    pg_config --cflags | grep "Wall"
     CHECK_RESULT $?
-    test -f test2.tiff
+    pg_config --cflags_sl | grep "fPIC"
     CHECK_RESULT $?
-    convert test2.tiff test2.pcx
+    pg_config --ldflags | grep "Wl"
     CHECK_RESULT $?
-    test -f test2.pcx
+    pg_config --ldflags_ex
     CHECK_RESULT $?
-    convert -sample 50%x50% test1.jpg test1_sj.jpg
+    pg_config --ldflags_sl
     CHECK_RESULT $?
-    test -f test1_sj.jpg
+    pg_config --libs | grep "lpgcommon"
     CHECK_RESULT $?
-    convert -resize 1024x576 test1_sj.jpg test1_tz.jpg
+    pg_config --version | grep "PostgreSQL"
     CHECK_RESULT $?
-    test -f test1_tz.jpg
+    pg_config -? | grep "Usage:"
     CHECK_RESULT $?
     LOG_INFO "End to run test."
 }
+
 function post_test() {
     LOG_INFO "Start to restore the test environment."
+    systemctl stop postgresql
     DNF_REMOVE
-    rm -rf ../common1
+    rm -rf /var/lib/pgsql/*
     LOG_INFO "End to restore the test environment."
 }
 main "$@"

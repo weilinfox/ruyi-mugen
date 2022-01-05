@@ -1,5 +1,5 @@
 {
-    "path": "$OET_PATH/testcases/cli-test/postgresql_cmd",
+    "path": "$OET_PATH/testcases/cli-test/postgresql",
     "cases": [
         {
             "name": "oe_test_postgresql_clusterdb"
@@ -107,9 +107,6 @@
             "name": "oe_test_postgresql-server_pg_resetwal"
         },
         {
-            "name": "oe_test_postgresql-server_pg_rewind"
-        },
-        {
             "name": "oe_test_postgresql-server_postgres01"
         },
         {
@@ -120,6 +117,9 @@
         },
         {
             "name": "oe_test_postgresql_vacuumdb"
+        },
+        {
+            "name": "oe_test_service_postgresql"
         }
     ]
 }

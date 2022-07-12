@@ -1,8 +1,0 @@
-{
-    "path": "$OET_PATH/testcases/cli-test/tpm-quote-tools",
-    "cases": [
-        {
-            "name": "oe_test_tpm-quote-tools"
-        }
-    ]
-}

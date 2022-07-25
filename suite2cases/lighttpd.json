@@ -1,8 +1,0 @@
-{
-    "path": "$OET_PATH/testcases/cli-test/lighttpd",
-    "cases": [
-        {
-            "name": "oe_test_service_lighttpd"
-        }
-    ]
-}

@@ -40,8 +40,16 @@ done
 
 br_conf="/etc/qemu/bridge.conf"
 br_conf1="/usr/local/etc/qemu/bridge.conf"
+br_conf2=""
 br_conf_bak="/etc/qemu/bridge.conf.bak"
 br_conf1_bak="/usr/local/etc/qemu/bridge.conf.bak"
+br_conf2_bak=""
+
+if [[ -n $MUGEN_QEMU_ACL_DIR ]]; then
+    mkdir -p $MUGEN_QEMU_ACL_DIR
+    br_conf2="$MUGEN_QEMU_ACL_DIR/bridge.conf"
+    br_conf2_bak="$MUGEN_QEMU_ACL_DIR/bridge.conf.bak"
+fi
 
 if [[ $con_op == "start" ]]; then
     if [[ ! -e $con_op ]]; then
@@ -59,6 +67,12 @@ if [[ $con_op == "start" ]]; then
 
     echo "allow ${br_name}" >> $br_conf
     echo "allow ${br_name}" >> $br_conf1
+    if [[ -n ${br_conf2} ]]; then
+        if [ -e $br_conf2 ]; then
+            cp $br_conf2 $br_conf2_bak
+        fi
+        echo "allow ${br_name}" >> $br_conf2
+    fi
 
     brctl addbr ${br_name}
     ifconfig ${br_name} up
@@ -74,5 +88,11 @@ if [[ $con_op == "stop" ]]; then
     if [ -e $br_conf1_bak ]; then
         cp $br_conf1_bak $br_conf1
         rm -rf $br_conf1_bak
+    fi
+    if [[ -n ${br_conf2} ]]; then
+        if [ -e $br_conf2_bak ]; then
+            cp $br_conf2_bak $br_conf2
+            rm -rf $br_conf2_bak
+        fi
     fi
 fi

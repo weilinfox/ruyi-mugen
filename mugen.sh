@@ -424,11 +424,11 @@ while getopts "c:af:r:dxb:s" option; do
         echo -e "The test script download function has been discarded."
         ;;
     a)
-        if echo "$@" | grep -q -e ' -a * -x *$\| -x * -a *$\| -ax *$\| -xa *$'; then
+        if echo "$@" | grep -q -e '-a * -x *$\| -x * -a *$\| -ax *$\| -xa *$'; then
             COMMAND_X="yes"
-        elif echo "$@" | grep -q -e ' -a * -s *$\| -s * -a *$\| -as *$\| -sa *$'; then
+        elif echo "$@" | grep -q -e '-a * -s *$\| -s * -a *$\| -as *$\| -sa *$'; then
             COMMAND_S="yes"
-        elif echo "$@" | grep -q -e ' -a * -b *$\| -b * -a *$\| -ab *$\| -ba *$'; then
+        elif echo "$@" | grep -q -e '-a * -b *$\| -b * -a *$\| -ab *$\| -ba *$'; then
             ret=$(build_all)
             exit $ret
         elif ! echo "$@" | grep -q -e '-a *$'; then

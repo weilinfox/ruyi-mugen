@@ -28,6 +28,7 @@ function CHECK_RESULT() {
     expect_result=${2-0}
     mode=${3-0}
     error_log=$4
+    exit_mode=${5-0}
 
     if [ -z "$actual_result" ]; then
         LOG_ERROR "Missing actual error code."
@@ -39,12 +40,18 @@ function CHECK_RESULT() {
             test -n "$error_log" && LOG_ERROR "$error_log"
             ((exec_result++))
             LOG_ERROR "${BASH_SOURCE[1]} line ${BASH_LINENO[0]}"
+	    if [ $exit_mode -eq 1 ]; then
+                    exit 1;
+            fi
         }
     else
         test "$actual_result"x == "$expect_result"x && {
             test -n "$error_log" && LOG_ERROR "$error_log"
             ((exec_result++))
             LOG_ERROR "${BASH_SOURCE[1]} line ${BASH_LINENO[0]}"
+	    if [ $exit_mode -eq 1 ]; then
+                    exit 1;
+            fi
         }
     fi
 

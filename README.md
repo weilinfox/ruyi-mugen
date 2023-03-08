@@ -52,7 +52,7 @@ mugen是openEuler社区开放的测试框架，提供公共配置和方法以便
             "SSH_PORT": 22,
             "HOST_IP": "",
             "HOST_USER": "",
-            "HOST_PASSWORD": ""
+            "HOST_PASSWORD": "",
             "HOST_SSH_PORT": ""
         }
     ]

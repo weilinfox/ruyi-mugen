@@ -189,7 +189,7 @@ function run_test_case() {
 
     case_path=($(find ${suite_path} -name "${test_case}.*" | sed -e "s#/${test_case}.\(sh\|py\)##"))
     test ${#case_path[@]} -gt 1 && {
-        LOG_ERROR "Multiple identical test case scripts have been found under the test suite. Please check your use case scripts."
+        LOG_ERROR "Multiple identical test case scripts have been found under the test suite. Please check your use case scripts. Test suite path:${suite_path}"
         return 1
     }
 

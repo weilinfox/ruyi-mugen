@@ -1,0 +1,57 @@
+{
+    "env": [
+        {
+            "type": "qemu",
+            "name": "qemu_1",
+            "kernal_img_path": "/home/openeuler/tmp_image/zImage",
+            "initrd_path": "/home/openeuler/tmp_image/initrd",
+            "option_wait_time": "180",
+            "login_wait_str": "openEuler Embedded(openEuler Embedded Reference Distro)",
+            "qemu_type": "aarch64",
+            "sdk_path":"/home/openeuler/tmp_image/sdk"
+        },
+        {
+            "type": "host",
+            "name": "host_1",
+            "ip": "127.0.0.1",
+            "password": "openEuler@123",
+            "port": "22",
+            "user": "root",
+            "put_all": true
+        }
+    ],
+    "combination": [
+        {
+            "name": "normal_test",
+            "testcases": [
+                {
+                    "testsuite": "embedded_os_basic_test"
+                },
+                {
+                    "testsuite": "embedded_security_config_test"
+                },
+                {
+                    "testsuite": "embedded_application_develop_tests"
+                }
+            ]
+        },
+        {
+            "name": "tiny_test",
+            "testcases": [
+                {
+                    "testsuite": "embedded_tiny_image_test"
+                }
+            ]
+        }
+    ],
+    "execute":[
+        {
+            "env":["qemu_1"],
+            "combination":"normal_test"
+        },
+        {
+            "env":["host_1"],
+            "combination":"tiny_test"
+        }
+    ]
+}

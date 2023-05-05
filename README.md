@@ -7,6 +7,7 @@ mugen是openEuler社区开放的测试框架，提供公共配置和方法以便
 - 优化了mugen框架的入口函数
 - 当前版本添加了对测试套路径和测试用例环境的添加
 - 新增python公共函数
+- 新增组合测试
 
 ## mugen使用教程
 
@@ -288,3 +289,134 @@ import xxx
 - 远程后台执行命令时，用例执行卡住，导致用例超时失败
   - 原因：ssh远程执行命令不会自动退出，会一直等待命令的控制台标准输出，直至命令运行信号结束
   - 解决方案：可以将标准输出与标准错误输出重定向到/dev/null，如此ssh就不会一直等待`cmd > /dev/nul 2>&1 &`
+
+## 组合测试
+
+#### 安装依赖软件
+
+`bash dep_install.sh`
+`bash dep_install.sh -e` (嵌入式)
+
+#### 组合设置配置
+
+组合配置使用json文件对组合测试进行配置，json文件示例
+```json
+{
+    // 运行环境配置，可选，支持host、qemu(嵌入式场景)，必须为列表，即使只有一个
+    "env": [ 
+        {
+            // 类型 type 必须配置，qemu类型kernal_img_path、initrd_path、qemu_type必配，其他参数参考qemu_ctl.sh参数
+            "type": "qemu",
+            // 名称 name 必须配置
+            "name": "qemu_1",
+            // kernal_img_path、initrd_path可以为本机目录，也可以是网络地址，如果配置目录不存在则会使用wget下载
+            "kernal_img_path": "https://mirrors.nju.edu.cn/openeuler/openEuler-22.03-LTS-SP1/embedded_img/arm64/aarch64-std/zImage",
+            "initrd_path": "https://mirrors.nju.edu.cn/openeuler/openEuler-22.03-LTS-SP1/embedded_img/arm64/aarch64-std/openeuler-image-qemu-aarch64-20221228125551.rootfs.cpio.gz",
+            "option_wait_time": "180",
+            "login_wait_str": "openEuler Embedded(openEuler Embedded Reference Distro)",
+            "qemu_type": "aarch64",
+            // 嵌入式sdk路径配置，可以为本机目录，也可以是网络地址，如果配置目录不存在则会使用wget下载
+            "sdk_path":"https://mirrors.nju.edu.cn/openeuler/openEuler-22.03-LTS-SP1/embedded_img/arm64/aarch64-std/openeuler-glibc-x86_64-openeuler-image-aarch64-qemu-aarch64-toolchain-22.03.sh",
+            "put_all":true
+        },
+        {
+            // 类型 type 必须配置，host类型，ip、password比配，其他参数参考bash mugen.sh -c
+            "type": "host",
+            // 名称 name 必须配置
+            "name": "host_1",
+            "ip": "192.168.10.100",
+            "password": "openEuler@123",
+            "port": "22",
+            "user": "root",
+            "run_remote": true,
+            "copy_all": true
+        }
+    ],
+    // 测试套组合配置，必配，必须为列表，可为多个组合
+    "combination": [
+        {
+            // 组合名称 name
+            "name": "normal_test",
+            // 测试用例组合， 必须为列表
+            "testcases": [
+                {
+                    // 使用全部测试套
+                    "testsuite": "embedded_os_basic_test"
+                },
+                {
+                    // 使用testsuite指定测试套中add里包含的测试用例组成一个新的测试套
+                    "testsuite": "embedded_os_basic_extra_test",
+                    "add": ["oe_test_kmod_depmod", "oe_test_libcap_libcap"]
+                },
+                {
+                    // 使用testsuite指定测试套中删除del里包含的测试用例组成一个新的测试套
+                    "testsuite": "embedded_security_config_test",
+                    "del": "oe_test_check_file_sys_protect_003"
+                }
+            ]
+        },
+        {
+            "name": "easy_test",
+            "testcases": [
+                {
+                    "testsuite": "embedded_os_basic_test"
+                }
+            ]
+        }
+    ],
+    // 执行关系，可选，必须为列表
+    "execute":[
+        {
+            // 执行环境，必须为列表，env中应为前面运行环境配置中的运行环境名称
+            "env":["qemu_1", "qemu_2"],
+            // 执行组合名称，仅支持配置一个
+            "combination":"normal_test"
+        },
+        {
+            "env":["qemu_2"],
+            "combination":"easy_test"
+        },
+        {
+            "env":["host_1"],
+            "combination":"easy_test"
+        }
+    ]
+}
+```
+
+#### 执行组合测试
+
+bash combination.sh 组合配置名(在combination目录中，不需要.json) 生成配置组合文件夹及执行脚本
+示例:
+```bash
+bash combination.sh embedded_ci_test
+```
+
+bash combination.sh --all 执行所有在combination目录中的配置文件
+
+bash combination.sh -f 组合配置文件(不在combination目录中，需要绝对路径，包含.json后最)
+示例:
+```bash
+bash combination.sh -f /home/openeuler/test.json
+```
+
+bash combination.sh -d 组合配置文件所在目录(不在combination目录中，需要绝对路径，配置文件必须为.json后缀)
+示例:
+```bash
+bash combination.sh -d /home/openeuler/
+```
+
+bash combination.sh 组合配置名 -r 生成配置组合文件夹及执行脚本并执行脚本，并打印执行结果
+示例:
+```bash
+bash combination.sh -r embedded_ci_test
+bash combination.sh -r -a
+bash combination.sh -r -f /home/openeuler/test.json
+bash combination.sh -r -d /home/openeuler/
+```
+
+bash combination.sh -p 打印配置执行脚本执行结果
+示例:
+```bash
+bash combination.sh -p
+```

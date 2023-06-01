@@ -426,6 +426,7 @@ def print_combination_info_results(result_info:dict):
                                                      add_space_to_str("testcase_name", case_len),
                                                      add_space_to_str("result", result_len))
     print_str = print_str + "\n" + '-'*one_line_len
+    fail_test_num = 0
     for one_comb in result_info.keys():
         if (one_comb == "max_combinations_name_len" or
             one_comb == "max_suite_name_len" or
@@ -441,6 +442,7 @@ def print_combination_info_results(result_info:dict):
                                                     add_space_to_str("succeed", result_len))
             if "fail" in result_info[one_comb][one_suite]:
                 for one_case in result_info[one_comb][one_suite]["fail"]:
+                    fail_test_num += 1
                     print_str = print_str + "\n" + "| %s | %s | %s | %s |"%(
                                                     add_space_to_str(one_comb, comb_len),
                                                     add_space_to_str(one_suite, suite_len),
@@ -449,6 +451,7 @@ def print_combination_info_results(result_info:dict):
     print_str = print_str + "\n" + '-'*one_line_len
     print_str = print_str + "\n"
     print(print_str)
+    return fail_test_num
 
 def print_combination_results():
     result_info = get_combination_results_info()
@@ -487,19 +490,19 @@ if __name__ == "__main__":
             if os.path.splitext(one_file)[-1] != ".json":
                 continue
             combinations.append(os.path.join(arge.dir, one_file))
-    if len(combinations) == 0 and not arge.all:
-        mugen_log.logging("ERROR", "未配置需要执行的组合测试名")
     for one_combinations in arge.combinations:
         tmp_name = one_combinations
         if os.path.splitext(tmp_name)[-1] != ".json":
             tmp_name = tmp_name + ".json"
-        combinations.extend(os.path.join(COMBINATION_PATH, tmp_name))
+        combinations.append(os.path.join(COMBINATION_PATH, tmp_name))
+    if len(combinations) == 0 and not arge.all:
+            mugen_log.logging("ERROR", "未配置需要执行的组合测试名")
     if arge.all:
         combinations.extend(get_all_combinations())
     generate_script(combinations)
     if arge.run is not None and arge.run:
         run_proc = subprocess.run(['sh', '-x', COMBINATION_SCRIPT_PATH])
         result_info = get_combination_results_info()
-        print_combination_info_results(result_info)
-        sys.exit(run_proc.returncode)
+        result_fail_num = print_combination_info_results(result_info)
+        sys.exit(run_proc.returncode + result_fail_num)
     sys.exit(0)

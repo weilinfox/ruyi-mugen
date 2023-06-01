@@ -82,15 +82,34 @@ def rpm_install(pkgs, node=1, tmpfile=""):
     )
     if repoCode != 0:
         return repoCode, repoList
-
-    depCode, depList = func(
+    upCode, upList = func(
         conn=conn,
         cmd="dnf --assumeno install "
         + pkgs
-        + ' 2>&1 | grep -wE "$(echo '
-        + repoList
-        + " | sed 's/ /|/g')\" | grep -wE \"$(uname -m)|noarch\" | awk '{print $1}'",
+        + " 2>&1| grep -A 1000 \"Upgrading:\" | grep update | grep -wE \"$(uname -m)|noarch\"|awk '{print $1}'|xargs",
     )
+    if upCode != 0:
+        return upCode, upList
+    if len(upList) == 0:
+        depCode, depList = func(
+            conn=conn,
+            cmd="dnf --assumeno install "
+            + pkgs
+            + ' 2>&1 | grep -wE "$(echo '
+            + repoList
+            + " | sed 's/ /|/g')\" | grep -wE \"$(uname -m)|noarch\"| awk '{print $1}'",
+        )
+    else:
+        depCode, depList = func(
+            conn=conn,
+            cmd="dnf --assumeno install "
+            + pkgs
+            + ' 2>&1 | grep -wE "$(echo '
+            + repoList
+            + " | sed 's/ /|/g')\" | grep -wE \"$(uname -m)|noarch\"| grep -vE \"$(echo "
+            + upList
+            + " | sed 's/ /|/g')\" | awk '{print $1}'",
+        )
     if depCode != 0:
         return depCode, depList
 

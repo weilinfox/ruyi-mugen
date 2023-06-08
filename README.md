@@ -302,6 +302,10 @@ import xxx
 组合配置使用json文件对组合测试进行配置，json文件示例
 ```json
 {
+    // 配置运行环境需要export的环境变量
+    "export": {
+        "FIND_TINY_DIR":"/home/openeuler/tmp_image/tiny"
+    },
     // 运行环境配置，可选，支持host、qemu(嵌入式场景)，必须为列表，即使只有一个
     "env": [ 
         {

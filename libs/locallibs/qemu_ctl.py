@@ -145,7 +145,10 @@ def qemu_start_make_cmd(finally_config, i, br_name):
     run_cmd.append(finally_config["initrd_path_list"][i])
     run_cmd.append("-nographic")
     run_cmd.append("-device")
-    run_cmd.append("virtio-net-device,netdev=tap0,mac=%s"%finally_config["qemu_mac_list"][i])
+    if finally_config["qemu_type_list"][i] == "x86_64":
+        run_cmd.append("virtio-net-pci,netdev=tap0,mac=%s"%finally_config["qemu_mac_list"][i])
+    else:
+        run_cmd.append("virtio-net-device,netdev=tap0,mac=%s"%finally_config["qemu_mac_list"][i])
     run_cmd.append("-netdev")
     run_cmd.append("bridge,id=tap0,br=%s"%br_name)
 

@@ -1,4 +1,7 @@
 {
+    "export": {
+        "FIND_TINY_DIR":"/home/openeuler/tmp_image/tiny"
+    },
     "env": [
         {
             "type": "qemu",

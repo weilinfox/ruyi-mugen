@@ -1,0 +1,239 @@
+{
+    "export": {
+        "DOWNLOAD_BRANCH": "openEuler-22.03-LTS-SP2",
+        "FIND_TINY_DIR": "/home/openeuler/tmp_image/tiny"
+    },
+    "env": [
+        {
+            "type": "qemu",
+            "name": "qemu_aarch64",
+            "kernal_img_path": "/home/openeuler/tmp_image/aarch64/zImage",
+            "initrd_path": "/home/openeuler/tmp_image/aarch64/initrd",
+            "option_wait_time": "180",
+            "login_wait_str": "openEuler Embedded(openEuler Embedded Reference Distro)",
+            "qemu_type": "aarch64",
+            "sdk_path": "/home/openeuler/tmp_image/aarch64/sdk",
+            "put_all": true
+        },
+        {
+            "type": "qemu",
+            "name": "qemu_aarch64_2",
+            "kernal_img_path": "/home/openeuler/tmp_image/aarch64/zImage",
+            "initrd_path": "/home/openeuler/tmp_image/aarch64/initrd",
+            "option_wait_time": "180",
+            "login_wait_str": "openEuler Embedded(openEuler Embedded Reference Distro)",
+            "qemu_type": "aarch64",
+            "sdk_path": "/home/openeuler/tmp_image/aarch64/sdk"
+        },
+        {
+            "type": "qemu",
+            "name": "qemu_arm",
+            "kernal_img_path": "/home/openeuler/tmp_image/arm/zImage",
+            "initrd_path": "/home/openeuler/tmp_image/arm/initrd",
+            "option_wait_time": "180",
+            "login_wait_str": "openEuler Embedded(openEuler Embedded Reference Distro)",
+            "qemu_type": "arm",
+            "sdk_path": "/home/openeuler/tmp_image/arm/sdk"
+        },
+        {
+            "type": "qemu",
+            "name": "qemu_x86",
+            "kernal_img_path": "/home/openeuler/tmp_image/x86/zImage",
+            "initrd_path": "/home/openeuler/tmp_image/x86/initrd",
+            "option_wait_time": "180",
+            "login_wait_str": "openEuler Embedded(openEuler Embedded Reference Distro)",
+            "qemu_type": "x86_64",
+            "cpu": "qemu64",
+            "machine": "pc",
+            "sdk_path": "/home/openeuler/tmp_image/x86/sdk"
+        },
+        {
+            "type": "host",
+            "name": "raspi4_basic",
+            "ip": "192.168.10.8",
+            "password": "openEuler@123",
+            "port": "22",
+            "user": "root",
+            "run_remote": true,
+            "sdk_path": "/home/openeuler/tmp_image/raspi/sdk"
+        },
+        {
+            "type": "host",
+            "name": "raspi4_basic_2",
+            "ip": "192.168.10.9",
+            "password": "openEuler@123",
+            "port": "22",
+            "user": "root",
+            "run_remote": true,
+            "sdk_path": "/home/openeuler/tmp_image/raspi/sdk"
+        },
+        {
+            "type": "host",
+            "name": "tiny_test",
+            "ip": "127.0.0.1",
+            "password": "openEuler@123",
+            "port": "22",
+            "user": "root"
+        }
+    ],
+    "combination": [
+        {
+            "name": "basic_test_for_qemu",
+            "testcases": [
+                {
+                    "testsuite": "embedded_os_basic_test"
+                },
+                {
+                    "testsuite": "embedded_os_basic_extra_test",
+                    "del": [
+                        "oe_test_acl_allow_change_nochange",
+                        "oe_test_acl_ordinary_users_setgid"
+                    ]
+                },
+                {
+                    "testsuite": "embedded_security_config_test"
+                },
+                {
+                    "testsuite": "embedded_application_develop_tests"
+                },
+                {
+                    "testsuite": "smoke-basic-os",
+                    "add": "oe_test_acl_001"
+                }
+            ]
+        },
+        {
+            "name": "basic_test_for_device",
+            "testcases": [
+                {
+                    "testsuite": "embedded_os_basic_test"
+                },
+                {
+                    "testsuite": "embedded_os_basic_extra_test"
+                },
+                {
+                    "testsuite": "embedded_security_config_test"
+                },
+                {
+                    "testsuite": "embedded_application_develop_tests"
+                },
+                {
+                    "testsuite": "smoke-basic-os",
+                    "add": "oe_test_acl_001"
+                }
+            ]
+        },
+        {
+            "name": "third_party_test",
+            "testcases": [
+                {
+                    "testsuite": "embedded_third_party_packages_test"
+                }
+            ]
+        },
+        {
+            "name": "dsoftbus_basic_test",
+            "testcases": [
+                {
+                    "testsuite": "embedded_dsoftbus_basic_test"
+                }
+            ]
+        },
+        {
+            "name": "ltp",
+            "testcases": [
+                {
+                    "testsuite": "embedded_version_basic_tests",
+                    "add": "oe_test_version_ltp_test_001"
+                }
+            ]
+        },
+        {
+            "name": "posix",
+            "testcases": [
+                {
+                    "testsuite": "embedded_version_basic_tests",
+                    "add": "oe_test_version_posix_suite_test_001"
+                }
+            ]
+        },
+        {
+            "name": "tiny",
+            "testcases": [
+                {
+                    "testsuite": "embedded_tiny_image_test"
+                }
+            ]
+        }
+    ],
+    "execute": [
+        {
+            "env": [
+                "qemu_aarch64"
+            ],
+            "combination": "basic_test_for_qemu"
+        },
+        {
+            "env": [
+                "qemu_arm"
+            ],
+            "combination": "basic_test_for_qemu"
+        },
+        {
+            "env": [
+                "qemu_x86"
+            ],
+            "combination": "basic_test_for_qemu"
+        },
+        {
+            "env": [
+                "qemu_aarch64"
+            ],
+            "combination": "third_party_test"
+        },
+        {
+            "env": [
+                "qemu_aarch64"
+            ],
+            "combination": "posix"
+        },
+        {
+            "env": [
+                "qemu_aarch64",
+                "qemu_aarch64_2"
+            ],
+            "combination": "dsoftbus_basic_test"
+        },
+        {
+            "env": [
+                "raspi4_basic"
+            ],
+            "combination": "basic_test_for_device"
+        },
+        {
+            "env": [
+                "raspi4_basic"
+            ],
+            "combination": "third_party_test"
+        },
+        {
+            "env": [
+                "raspi4_basic"
+            ],
+            "combination": "posix"
+        },
+        {
+            "env": [
+                "raspi4_basic"
+            ],
+            "combination": "ltp"
+        },
+        {
+            "env": [
+                "raspi4_basic",
+                "raspi4_basic_2"
+            ],
+            "combination": "dsoftbus_basic_test"
+        }
+    ]
+}

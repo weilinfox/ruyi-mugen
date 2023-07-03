@@ -309,17 +309,13 @@ function run_all_cases() {
 
     local this_copy=false
     if [[ $COMMAND_S == "yes" && $COPY_DONE == "no" && ${NODE1_COPY_ALL}x == "true"x ]]; then
-        SFTP put --node 1 --remotedir /mugen_re/ --localdir ${OET_PATH}/testcases/
-        if [ $? -ne 0 ]; then
-            LOG_ERROR "Copy all testcases to remote fail."
-            return 1
-        fi
-        COPY_DONE="yes"
         local this_copy=true
     fi
 
     for test_suite in ${test_suites[*]}; do
         run_test_suite "$test_suite"
+        COPY_DONE="no"
+        local this_copy=true
     done
 
     if $this_copy; then

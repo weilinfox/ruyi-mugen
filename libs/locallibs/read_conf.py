@@ -35,6 +35,7 @@ NODE_ITEM = [
     "SSH_PORT",
     "NIC",
     "IPV4",
+    "IPV6",
     "MAC",
     "HOST_IP",
     "HOST_USER",

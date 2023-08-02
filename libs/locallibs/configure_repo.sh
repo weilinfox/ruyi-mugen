@@ -193,7 +193,7 @@ priority=1
 
             printf "
 [${version_info}_EPOL_source_%s]
-name=${version_info}_EPOL_source_%s}
+name=${version_info}_EPOL_source_%s
 baseurl=http://${service_ip}/repo.openeuler.org/${version_info}/EPOL/%s/main/source/
 enabled=1
 gpgcheck=1

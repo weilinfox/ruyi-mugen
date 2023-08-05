@@ -114,7 +114,7 @@ def write_conf(ip, password, port=22, user="root", run_remote=False, copy_all=Tr
         NODE_DATA["MACHINE"] = "kvm"
 
     stdin, stdout, stderr = ssh.exec_command(
-        "ip a | grep 'inet6'|grep -v 'scope host'|awk '{print $2}'|awk -F '/' '{print $1}'"
+        "ip a | grep 'inet6' | grep -v 'scope host' | awk '{print $2}' | awk -F '/' '{print $1}' | head -n 1"
     )
     NODE_DATA["IPV6"] = stdout.read().decode("utf-8").strip("\n")
 

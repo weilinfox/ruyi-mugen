@@ -42,6 +42,7 @@ os.makedirs(OET_PATH.rstrip("/") + "/" + "conf", exist_ok=True)
 MAX_QEMU_NUM = 253
 
 option_wait_time = 60
+login_wait_time = 2
 
 json_keys_help = "json key support:\n" \
     "    qemu_type: qemu type, support aarch64 and arm, default aarch64 \n" \
@@ -179,6 +180,7 @@ def qemu_start_subprocess(finally_config, br_name):
     global check_sshd_start_cmd
     global start_sshd_cmd
     global option_wait_time
+    global login_wait_time
 
     sub_list = []
     i = 0
@@ -205,6 +207,9 @@ def qemu_start_subprocess(finally_config, br_name):
         if not check_wait:
             mugen_log.logging("ERROR", "start qemu %d fail, wait time too long"%i)
             sys.exit(1)
+
+        time.sleep(login_wait_time)
+        one_sub.stdin.flush()
 
         one_sub.stdin.write(finally_config["user_list"][i] + "\n")
         one_sub.stdin.flush()
@@ -487,6 +492,7 @@ def qemu_control(options, args):
     global check_sshd_start_cmd
     global start_sshd_cmd
     global option_wait_time
+    global login_wait_time
 
     config_file = args.config_file
     check_login_str = args.login_wait_str
@@ -534,6 +540,7 @@ def qemu_control(options, args):
     if args.check_sshd_start_cmd is not None: check_sshd_start_cmd = args.check_sshd_start_cmd
     if args.start_sshd_cmd is not None: start_sshd_cmd = args.start_sshd_cmd
     if args.option_wait_time is not None: option_wait_time = args.option_wait_time
+    if args.login_wait_time is not None: login_wait_time = args.login_wait_time
 
     return qemu_start(qemu_config, put_all, args.br_name)
 
@@ -543,6 +550,7 @@ if __name__ == "__main__":
     parser.add_argument('--put_all', action="store_true", help = "config all qemu before run test copy all test case to qemu")
     parser.add_argument('--br_name', type=str, help = "config qemu use br name", default="testbr0")
     parser.add_argument('--login_wait_str', type=str, help = "start qemu wait this string to input user name ", default="login:")
+    parser.add_argument('--login_wait_time', type=str, help = "start qemu wait some time (s) then inout user name ", default=2)
     parser.add_argument('--option_wait_time', type=int, help = "start qemu every option wait time (s)", default=60)
     parser.add_argument('--start_sshd_cmd', type=str, help = "start sshd commond, if set will run after ip setted")
     parser.add_argument('--check_sshd_start_cmd', type=str, help = "check start sshd commond, if set will run after ip setted")

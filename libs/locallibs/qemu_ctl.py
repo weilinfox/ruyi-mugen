@@ -43,6 +43,7 @@ MAX_QEMU_NUM = 253
 
 option_wait_time = 60
 login_wait_time = 2
+extra_set_passwd = False
 
 json_keys_help = "json key support:\n" \
     "    qemu_type: qemu type, support aarch64 and arm, default aarch64 \n" \
@@ -181,6 +182,7 @@ def qemu_start_subprocess(finally_config, br_name):
     global start_sshd_cmd
     global option_wait_time
     global login_wait_time
+    global extra_set_passwd
 
     sub_list = []
     i = 0
@@ -222,7 +224,25 @@ def qemu_start_subprocess(finally_config, br_name):
         time.sleep(1)
         one_sub.stdin.write("\n")
         one_sub.stdin.flush()
-        time.sleep(1)
+
+        time.sleep(login_wait_time)
+        one_sub.stdin.flush()
+
+        if extra_set_passwd:
+            one_sub.stdin.write("passwd " + finally_config["user_list"][i] + "\n")
+            one_sub.stdin.flush()
+            time.sleep(login_wait_time)
+            one_sub.stdin.write(finally_config["passwd_list"][i] + "\n")
+            one_sub.stdin.flush()
+            time.sleep(login_wait_time)
+            one_sub.stdin.write(finally_config["passwd_list"][i] + "\n")
+            one_sub.stdin.flush()
+            time.sleep(login_wait_time)
+            one_sub.stdin.write("\n")
+            one_sub.stdin.flush()
+            time.sleep(login_wait_time)
+            one_sub.stdin.flush()
+
         one_sub.stdin.write("echo 'login qemu'" + "\n")
         one_sub.stdin.flush()
         check_wait = qemu_start_wait_output("login qemu", one_sub, sub_list, 0, wait_time=option_wait_time)
@@ -493,12 +513,14 @@ def qemu_control(options, args):
     global start_sshd_cmd
     global option_wait_time
     global login_wait_time
+    global extra_set_passwd
 
     config_file = args.config_file
     check_login_str = args.login_wait_str
     if check_login_str == "":
         check_login_str = "login:"
     put_all = args.put_all
+    extra_set_passwd = args.extra_set_passwd
     if (options == "stop" and config_file is not None):
         mugen_log.logging("ERROR", "stop no need config file")
         sys.exit(1)
@@ -550,7 +572,8 @@ if __name__ == "__main__":
     parser.add_argument('--put_all', action="store_true", help = "config all qemu before run test copy all test case to qemu")
     parser.add_argument('--br_name', type=str, help = "config qemu use br name", default="testbr0")
     parser.add_argument('--login_wait_str', type=str, help = "start qemu wait this string to input user name ", default="login:")
-    parser.add_argument('--login_wait_time', type=str, help = "start qemu wait some time (s) then inout user name ", default=2)
+    parser.add_argument('--login_wait_time', type=int, help = "start qemu wait some time (s) then inout user name ", default=2)
+    parser.add_argument('--extra_set_passwd', action="store_true", help = "run extra 'passwd <user>' to set root passwd in start qemu, this is for some image no need passwd by default")
     parser.add_argument('--option_wait_time', type=int, help = "start qemu every option wait time (s)", default=60)
     parser.add_argument('--start_sshd_cmd', type=str, help = "start sshd commond, if set will run after ip setted")
     parser.add_argument('--check_sshd_start_cmd', type=str, help = "check start sshd commond, if set will run after ip setted")

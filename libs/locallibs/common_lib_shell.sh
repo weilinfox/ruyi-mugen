@@ -234,7 +234,7 @@ function GET_FREE_PORT() {
     
     range=`expr $end_port - $start_port`
     for i in seq 100; do
-        rand=`expr$RANDOM % $range`
+        rand=`expr $RANDOM % $range`
         new_port=`expr $start_port + $rand`
         check=IS_FREE_PORT new_port
         if [ $check -eq 0 ]; then

@@ -122,7 +122,7 @@ def write_conf(ip, password, port=22, user="root", run_remote=False, copy_all=Tr
     NODE_DATA["FRAME"] = stdout.read().decode("utf-8").strip("\n")
 
     stdin, stdout, stderr = ssh.exec_command(
-        " ip route | grep " + ip + " | awk '{print $3}' | sort -u"
+        " ip route | grep " + ip + " | grep -v default | awk '{print $3}' | sort -u"
     )
     NODE_DATA["NIC"] = stdout.read().decode("utf-8").strip("\n")
 

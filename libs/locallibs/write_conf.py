@@ -27,6 +27,7 @@ import paramiko
 
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(SCRIPT_PATH)
+
 import mugen_log
 
 NODE_DATA = {"ID": 1}
@@ -41,8 +42,8 @@ def write_conf(ip, password, port=22, user="root", run_remote=False, copy_all=Tr
         port (int, optional): 测试环境ssh端口号. Defaults to 22.
         user (str, optional): 测试环境用户名. Defaults to "root".
     """
-    if None in (ip, password):
-        mugen_log.logging("error", "必要参数ip or password存在缺失.")
+    if ip is None:
+        mugen_log.logging("error", "必要参数ip存在缺失.")
         sys.exit(1)
 
     if not os.path.exists("/etc/mugen"):
@@ -88,7 +89,16 @@ def write_conf(ip, password, port=22, user="root", run_remote=False, copy_all=Tr
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy)
     try:
-        ssh.connect(ip, port, user, password)
+        if password:
+            ssh.connect(ip, port, user, password)
+        else:
+            key_file = '/root/.ssh/id_rsa'
+            if os.path.exists(key_file):
+                pkey = paramiko.RSAKey.from_private_key_file(key_file)
+                ssh.connect(ip, port, user, pkey=pkey)
+            else:
+                print('配置免密，请先创建互信！')
+                sys.exit(1)
     except paramiko.ssh_exception.NoValidConnectionsError as e:
         mugen_log.logging("error", e)
         sys.exit(1)
@@ -179,5 +189,7 @@ if __name__ == "__main__":
 
     if not args.run_remote:
         args.put_all = False
+    if not args.password:
+        args.password = ""
 
     write_conf(args.ip, args.password, args.port, args.user, args.run_remote, args.put_all)

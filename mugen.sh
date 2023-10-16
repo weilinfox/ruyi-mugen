@@ -15,6 +15,7 @@
 # @Version : 1.0
 # @Desc    :
 #####################################
+# shellcheck disable=SC2053,SC2128,SC2086,SC2181,SC2164,SC2207,SC2015
 
 OET_PATH=$(
     cd "$(dirname "$0")" || exit 1
@@ -43,6 +44,7 @@ function usage() {
     -x: the shell script is executed in debug mode\n
     -b: do make for test suite if test suite path have makefile or Makefile file\n
     -s: runing test case at remote NODE1
+    -m: Modify the configuration file that comes with the test case
     \n
     Example: 
         run all cases:
@@ -78,6 +80,9 @@ function usage() {
           if want run at remote should add --run_remote 
           if want run at remote copy all testcase once add --put_all
     \n
+    configure env of test case:
+            bash mugen.sh -m --suite \$suite --conf \$conf --key \$key --value \$value\n
+    \n
     do make for test suite:
         for all test suite:
             bash mugen.sh -b -a
@@ -87,6 +92,11 @@ function usage() {
 
 function deploy_conf() {
     python3 ${OET_PATH}/libs/locallibs/write_conf.py "$@"
+    test $? -ne 0 && exit 1 || exit 0
+}
+
+function modify_conf() {
+    python3 "${OET_PATH}"/libs/locallibs/modify_conf.py "$@"
     test $? -ne 0 && exit 1 || exit 0
 }
 
@@ -411,10 +421,13 @@ function copy_libs_to_node1() {
     fi
 }
 
-while getopts "c:af:r:dxb:s" option; do
+while getopts "c:af:r:dxb:s:m" option; do
     case $option in
     c)
         deploy_conf ${*//-c/}
+        ;;
+    m)
+        modify_conf ${*//-m/}
         ;;
     d)
         echo -e "The test script download function has been discarded."

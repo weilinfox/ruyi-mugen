@@ -18,6 +18,12 @@
 
 source "${OET_PATH}"/libs/locallibs/common_lib.sh
 
+get_ruyi_dir() {
+	ruyibase=$XDG_CACHE_HOME
+	[ "$ruyibase" == "" ] && ruyibase=~/.cache/
+	echo "$ruyibase"/ruyi
+}
+
 install_ruyi() {
 	curl -L -o ruyi.tar.gz https://github.com/ruyisdk/ruyi/archive/refs/heads/main.tar.gz
 	tar -zxvf ruyi.tar.gz
@@ -28,6 +34,7 @@ install_ruyi() {
 	export OLDPYTHONPATH="$PYTHON_PATH"
 	export PYTHONPATH="$(pwd)"
 	export RUYI_DEBUG=x
+	rm -rf $(get_ruyi_dir)
 }
 
 
@@ -40,5 +47,6 @@ remove_ruyi() {
 	rm -f ruyi.tar.gz
 	rm -rf ruyi-main
 	rm -rf venv-ruyi
+	rm -rf $(get_ruyi_dir)
 }
 

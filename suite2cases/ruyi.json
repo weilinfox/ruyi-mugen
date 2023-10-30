@@ -3,6 +3,9 @@
     "cases": [
         {
             "name": "oe_test_ruyi"
+        },
+        {
+            "name": "oe_test_ruyi_cachedir"
         }
     ]
 }

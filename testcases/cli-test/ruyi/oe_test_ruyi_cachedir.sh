@@ -26,14 +26,13 @@ function pre_test() {
 
 function run_test() {
     LOG_INFO "Start to run test."
-    python ruyi | grep usage
-    CHECK_RESULT $? 0 1 "Check ruyi empty cmdline failed"
-    python ruyi -h | grep usage
-    CHECK_RESULT $? 0 0 "Check ruyi help failed"
+    export XDG_CACHE_HOME=~/.cache/test
+    mkdir $XDG_CACHE_HOME
+    xdg_ruyi_dir="$XDG_CACHE_HOME"/ruyi
+    default_ruyi_dir=~/.cache/ruyi
+
     python ruyi list
     CHECK_RESULT $? 0 0 "Check ruyi empty list failed"
-    [ -d $(get_ruyi_dir) ]
-    CHECK_RESULT $? 0 0 "Check ruyi create cache directory failed"
     python ruyi update
     CHECK_RESULT $? 0 0 "Check ruyi update failed"
     python ruyi list | grep "Package declares"
@@ -47,6 +46,14 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi install package failed"
     python ruyi install $pkgname 2>&1 | grep "skipping already installed package $pkgname"
     CHECK_RESULT $? 0 0 "Check ruyi install duplicate package failed"
+
+    [ -d $xdg_ruyi_dir ]
+    CHECK_RESULT $? 0 0 "Check ruyi create xdg based cache directory failed"
+    [ -d $default_ruyi_dir ]
+    CHECK_RESULT $? 0 1 "Check ruyi create default cache directory failed"
+    export XDG_CACHE_HOME=
+    rm -rf $xdg_ruyi_dir
+
     LOG_INFO "End of the test."
 }
 

@@ -24,7 +24,7 @@ get_ruyi_dir() {
 	echo "$ruyibase"/ruyi
 }
 
-install_ruyi() {
+install_src_ruyi() {
 	curl -L -o ruyi.tar.gz https://github.com/ruyisdk/ruyi/archive/refs/heads/main.tar.gz
 	tar -zxvf ruyi.tar.gz
 	pushd ruyi-main
@@ -38,7 +38,7 @@ install_ruyi() {
 }
 
 
-remove_ruyi() {
+remove_src_ruyi() {
 	deactivate
 	export PYTHONPATH="$OLDPYTHONPATH"
 	export OLDPYTHONPATH=
@@ -47,6 +47,20 @@ remove_ruyi() {
 	rm -f ruyi.tar.gz
 	rm -rf ruyi-main
 	rm -rf venv-ruyi
+	rm -rf $(get_ruyi_dir)
+}
+
+install_ruyi() {
+	curl -L -o ruyi https://mirror.iscas.ac.cn/ruyisdk/ruyi/testing/ruyi.20231030
+	chmod +x ruyi
+	ln -s $(realpath ruyi) /usr/bin/ruyi
+	rm -rf $(get_ruyi_dir)
+}
+
+remove_ruyi() {
+	rm -f ruyi
+	rm -f /usr/bin/ruyi
+	export RUYI_DEBUG=
 	rm -rf $(get_ruyi_dir)
 }
 

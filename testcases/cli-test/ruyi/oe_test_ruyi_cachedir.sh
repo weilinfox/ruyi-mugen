@@ -31,20 +31,20 @@ function run_test() {
     xdg_ruyi_dir="$XDG_CACHE_HOME"/ruyi
     default_ruyi_dir=~/.cache/ruyi
 
-    python ruyi list
+    ruyi list
     CHECK_RESULT $? 0 0 "Check ruyi empty list failed"
-    python ruyi update
+    ruyi update
     CHECK_RESULT $? 0 0 "Check ruyi update failed"
-    python ruyi list | grep "Package declares"
+    ruyi list | grep "Package declares"
     CHECK_RESULT $? 0 0 "Check ruyi list package failed"
-    python ruyi list | grep "Binary artifacts"
+    ruyi list | grep "Binary artifacts"
     CHECK_RESULT $? 0 0 "Check ruyi list artifacts failed"
-    python ruyi list | grep "Toolchain metadata"
+    ruyi list | grep "Toolchain metadata"
     CHECK_RESULT $? 0 0 "Check ruyi list metadata failed"
-    pkgname=$(python ruyi list | grep -e "^## " | head -n 1 | awk '{last_word = $NF; sub(/.$/, "", last_word); print substr(last_word, 2, length(last_word) - 1)}')
-    python ruyi install $pkgname
+    pkgname=$(ruyi list | grep -e "^## " | head -n 1 | awk '{last_word = $NF; sub(/.$/, "", last_word); print substr(last_word, 2, length(last_word) - 1)}')
+    ruyi install $pkgname
     CHECK_RESULT $? 0 0 "Check ruyi install package failed"
-    python ruyi install $pkgname 2>&1 | grep "skipping already installed package $pkgname"
+    ruyi install $pkgname 2>&1 | grep "skipping already installed package $pkgname"
     CHECK_RESULT $? 0 0 "Check ruyi install duplicate package failed"
 
     [ -d $xdg_ruyi_dir ]

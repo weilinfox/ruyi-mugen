@@ -6,6 +6,9 @@
         },
         {
             "name": "oe_test_ruyi_cachedir"
+        },
+        {
+            "name": "oe_test_ruyi_wrong_proxy"
         }
     ]
 }

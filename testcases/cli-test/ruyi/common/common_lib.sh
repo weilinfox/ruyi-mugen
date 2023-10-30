@@ -24,7 +24,7 @@ install_ruyi() {
 	pushd ruyi-main
 	python -m venv --copies venv-ruyi
 	source venv-ruyi/bin/activate
-	pip install -i https://mirrors.bfsu.edu.cn/pypi/web/simple rich
+	pip install -i https://mirrors.bfsu.edu.cn/pypi/web/simple rich gitpython pyxdg
 	export OLDPYTHONPATH="$PYTHON_PATH"
 	export PYTHONPATH="$(pwd)"
 	export RUYI_DEBUG=x
@@ -39,5 +39,6 @@ remove_ruyi() {
 	popd
 	rm -f ruyi.tar.gz
 	rm -rf ruyi-main
+	rm -rf venv-ruyi
 }
 

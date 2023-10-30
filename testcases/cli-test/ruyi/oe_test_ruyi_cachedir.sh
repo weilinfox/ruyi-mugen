@@ -11,9 +11,9 @@
 # #############################################
 # @Author    :   weilinfox
 # @Contact   :   caiweilin@iscas.ac.cn
-# @Date      :   2023/10/24
+# @Date      :   2023/10/30
 # @License   :   Mulan PSL v2
-# @Desc      :   ruyisdk common tests
+# @Desc      :   ruyisdk cache location tests
 # #############################################
 
 source "./common/common_lib.sh"
@@ -51,8 +51,8 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi create xdg based cache directory failed"
     [ -d $default_ruyi_dir ]
     CHECK_RESULT $? 0 1 "Check ruyi create default cache directory failed"
+    rm -rf $XDG_CACHE_HOME
     export XDG_CACHE_HOME=
-    rm -rf $xdg_ruyi_dir
 
     LOG_INFO "End of the test."
 }

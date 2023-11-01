@@ -1,5 +1,7 @@
 # mugen
 
+RUYISDK mugen 测试分支
+
 ## mugen介绍
 mugen是openEuler社区开放的测试框架，提供公共配置和方法以便社区开发者进行测试代码的编写和执行
 

@@ -1,6 +1,22 @@
 # mugen
 
+[![Build Status](https://jenkins.inuyasha.love/job/ruyi-test/badge/icon)](https://jenkins.inuyasha.love/job/ruyi-test/)
+
 RUYISDK mugen 测试分支
+
++ 完整日志
+
+   + [ruyi-test-oE2203-x86_64-logs.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-oE2203-x86_64-logs.tar.gz)
+   + [ruyi-test-oE2309-x86_64-logs.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-oE2309-x86_64-logs.tar.gz)
+   + [ruyi-test-fedora38-x86_64-logs.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-fedora38-x86_64-logs.tar.gz)
+   + [ruyi-test-jammy-x86_64-logs.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-jammy-x86_64-logs.tar.gz)
+
++ 失败日志（若全部成功则链接无效）
+
+   + [ruyi-test-oE2203-x86_64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-oE2203-x86_64-logs_failed.tar.gz)
+   + [ruyi-test-oE2309-x86_64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-oE2309-x86_64-logs_failed.tar.gz)
+   + [ruyi-test-fedora38-x86_64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-fedora38-x86_64-logs_failed.tar.gz)
+   + [ruyi-test-jammy-x86_64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-jammy-x86_64-logs_failed.tar.gz)
 
 ## mugen介绍
 mugen是openEuler社区开放的测试框架，提供公共配置和方法以便社区开发者进行测试代码的编写和执行

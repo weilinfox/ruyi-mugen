@@ -11,7 +11,7 @@ RUYISDK mugen 测试分支
    + [ruyi-test-fedora38-x86_64-logs.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-fedora38-x86_64-logs.tar.gz)
    + [ruyi-test-jammy-x86_64-logs.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-jammy-x86_64-logs.tar.gz)
 
-+ 失败日志（若全部成功则链接无效）
++ 失败日志
 
    + [ruyi-test-oE2203-x86_64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-oE2203-x86_64-logs_failed.tar.gz)
    + [ruyi-test-oE2309-x86_64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-oE2309-x86_64-logs_failed.tar.gz)

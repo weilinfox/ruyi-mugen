@@ -35,13 +35,17 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi empty list failed"
     ruyi update
     CHECK_RESULT $? 0 0 "Check ruyi update failed"
+    pkgcnt=$(ruyi list | grep -e "^* " | wc -l)
+    CHECK_RESULT $pkgcnt 0 1 "Check ruyi list failed"
     ruyi list | grep "Package declares"
-    CHECK_RESULT $? 0 0 "Check ruyi list package failed"
-    ruyi list | grep "Binary artifacts"
-    CHECK_RESULT $? 0 0 "Check ruyi list artifacts failed"
-    ruyi list | grep "Toolchain metadata"
-    CHECK_RESULT $? 0 0 "Check ruyi list metadata failed"
-    pkgname=$(ruyi list | grep -e "^## " | head -n 1 | awk '{last_word = $NF; sub(/.$/, "", last_word); print substr(last_word, 2, length(last_word) - 1)}')
+    CHECK_RESULT $? 0 1 "Check ruyi brief list failed"
+    ruyi list --verbose | grep "Package declares"
+    CHECK_RESULT $? 0 0 "Check ruyi list verbose package failed"
+    ruyi list --verbose | grep "Binary artifacts"
+    CHECK_RESULT $? 0 0 "Check ruyi list verbose artifacts failed"
+    ruyi list --verbose | grep "Toolchain metadata"
+    CHECK_RESULT $? 0 0 "Check ruyi list verbose metadata failed"
+    pkgname=$(ruyi list | grep -e "^* " | head -n 1 | cut -d' ' -f 2)
     ruyi install $pkgname
     CHECK_RESULT $? 0 0 "Check ruyi install package failed"
     ruyi install $pkgname 2>&1 | grep "skipping already installed package $pkgname"

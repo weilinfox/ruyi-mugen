@@ -30,7 +30,7 @@ function run_test() {
     pkgname=$(ruyi list | grep -e "^* " | head -n 1 | cut -d' ' -f 2)
     http_proxy=http://wrong.proxy https_proxy=http://wrong.proxy ruyi install $pkgname
     CHECK_RESULT $? 0 1 "Check ruyi install package from wrong proxy failed"
-    ruyi install $pkgname | grep "downloading"
+    ruyi install $pkgname 2>&1 | grep "downloading"
     CHECK_RESULT $? 0 0 "Check ruyi reinstall package failed"
     LOG_INFO "End of the test."
 }

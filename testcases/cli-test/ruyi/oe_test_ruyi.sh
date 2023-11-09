@@ -26,6 +26,7 @@ function pre_test() {
 
 function run_test() {
     LOG_INFO "Start to run test."
+
     ruyi
     CHECK_RESULT $? 0 1 "Check ruyi empty cmdline failed"
     ruyi 2>&1 |grep usage
@@ -53,6 +54,25 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi install package failed"
     ruyi install $pkgname 2>&1 | grep "skipping already installed package $pkgname"
     CHECK_RESULT $? 0 0 "Check ruyi install duplicate package failed"
+    ruyi install name:$pkgname 2>&1 | grep "skipping already installed package $pkgname"
+    CHECK_RESULT $? 0 0 "Check ruyi install duplicate package by name failed"
+
+    ruyi list profiles
+    CHECK_RESULT $? 0 0 "Check ruyi profile"
+    proname=$(ruyi list profiles | head -n 1)
+    ruyi venv --toolchain $pkgname $proname test-venv 2>&1 | grep "The virtual environment is now created."
+    CHECK_RESULT $? 0 0 "Check ruyi venv install failed"
+    [ -f ./test-venv/bin/ruyi-activate ]
+    CHECK_RESULT $? 0 0 "Check ruyi venv activate file failed"
+    oldps1="$PS1"
+    source ./test-venv/bin/ruyi-activate
+    echo "$PS1" | grep test-venv
+    CHECK_RESULT $? 0 0 "Check activate ruyi venv PS1 failed"
+    ruyi-deactivate
+    [ "$oldps1" == "$PS1" ]
+    CHECK_RESULT $? 0 0 "Check deactivate ruyi venv PS1 failed"
+    rm -rf test-venv
+
     LOG_INFO "End of the test."
 }
 

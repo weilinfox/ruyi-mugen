@@ -49,12 +49,12 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi list verbose artifacts failed"
     ruyi list --verbose | grep "Toolchain metadata"
     CHECK_RESULT $? 0 0 "Check ruyi list verbose metadata failed"
-    pkgname=$(ruyi list | grep -e "^* " | head -n 1 | cut -d' ' -f 2)
+    pkgname=$(ruyi list | grep -e "^* toolchain" | head -n 1 | cut -d' ' -f 2)
     ruyi install $pkgname
     CHECK_RESULT $? 0 0 "Check ruyi install package failed"
-    ruyi install $pkgname 2>&1 | grep "skipping already installed package $pkgname"
+    ruyi install $pkgname 2>&1 | grep "skipping already installed package"
     CHECK_RESULT $? 0 0 "Check ruyi install duplicate package failed"
-    ruyi install name:$pkgname 2>&1 | grep "skipping already installed package $pkgname"
+    ruyi install name:$pkgname 2>&1 | grep "skipping already installed package"
     CHECK_RESULT $? 0 0 "Check ruyi install duplicate package by name failed"
 
     ruyi list profiles

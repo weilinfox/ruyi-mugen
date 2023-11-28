@@ -51,7 +51,9 @@ remove_src_ruyi() {
 }
 
 install_ruyi() {
-	curl -L -o ruyi https://mirror.iscas.ac.cn/ruyisdk/ruyi/testing/ruyi.amd64.20231107
+	arch='amd64'
+	if [ "$(uname -m)" == "riscv64" ]; then arch='riscv64'; fi
+	curl -L -o ruyi https://mirror.iscas.ac.cn/ruyisdk/ruyi/testing/ruyi.${arch}.20231126
 	chmod +x ruyi
 	ln -s $(realpath ruyi) /usr/bin/ruyi
 	rm -rf $(get_ruyi_dir)

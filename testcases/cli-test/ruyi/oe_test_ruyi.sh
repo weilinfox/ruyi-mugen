@@ -58,7 +58,7 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi install duplicate package by name failed"
 
     ruyi list profiles
-    CHECK_RESULT $? 0 0 "Check ruyi profile"
+    CHECK_RESULT $? 0 0 "Check ruyi profile failed"
     proname=$(ruyi list profiles | head -n 1)
     ruyi venv --toolchain $pkgname $proname test-venv 2>&1 | grep "The virtual environment is now created."
     CHECK_RESULT $? 0 0 "Check ruyi venv install failed"
@@ -72,6 +72,14 @@ function run_test() {
     [ "$oldps1" == "$PS1" ]
     CHECK_RESULT $? 0 0 "Check deactivate ruyi venv PS1 failed"
     rm -rf test-venv
+
+    pkgname=$(ruyi list | grep -e "^* source" | head -n 1 | cut -d'/' -f 2)
+    mkdir source-test && cd source-test
+    ruyi extract $(pkgname)
+    CHECK_RESULT $? 0 0 "Check ruyi extract failed"
+    [ "$(ls)" != "" ]
+    CHECK_RESULT $? 0 0 "Check ruyi extract dir not enpty failed"
+    cd .. && rm -rf source-test
 
     LOG_INFO "End of the test."
 }

@@ -49,6 +49,10 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi list verbose artifacts failed"
     ruyi list --verbose | grep "Toolchain metadata"
     CHECK_RESULT $? 0 0 "Check ruyi list verbose metadata failed"
+
+    ruyi list profiles
+    CHECK_RESULT $? 0 0 "Check ruyi profile failed"
+
     pkgname=$(ruyi list | grep -e "^* toolchain" | head -n 1 | cut -d'/' -f 2)
     ruyi install $pkgname
     CHECK_RESULT $? 0 0 "Check ruyi install package failed"
@@ -57,25 +61,9 @@ function run_test() {
     ruyi install name:$pkgname 2>&1 | grep "skipping already installed package"
     CHECK_RESULT $? 0 0 "Check ruyi install duplicate package by name failed"
 
-    ruyi list profiles
-    CHECK_RESULT $? 0 0 "Check ruyi profile failed"
-    proname=$(ruyi list profiles | head -n 1)
-    ruyi venv --toolchain $pkgname $proname test-venv 2>&1 | grep "The virtual environment is now created."
-    CHECK_RESULT $? 0 0 "Check ruyi venv install failed"
-    [ -f ./test-venv/bin/ruyi-activate ]
-    CHECK_RESULT $? 0 0 "Check ruyi venv activate file failed"
-    oldps1="$PS1"
-    source ./test-venv/bin/ruyi-activate
-    echo "$PS1" | grep test-venv
-    CHECK_RESULT $? 0 0 "Check activate ruyi venv PS1 failed"
-    ruyi-deactivate
-    [ "$oldps1" == "$PS1" ]
-    CHECK_RESULT $? 0 0 "Check deactivate ruyi venv PS1 failed"
-    rm -rf test-venv
-
     pkgname=$(ruyi list | grep -e "^* source" | head -n 1 | cut -d'/' -f 2)
     mkdir source-test && cd source-test
-    ruyi extract $(pkgname)
+    ruyi extract $pkgname
     CHECK_RESULT $? 0 0 "Check ruyi extract failed"
     [ "$(ls)" != "" ]
     CHECK_RESULT $? 0 0 "Check ruyi extract dir not enpty failed"

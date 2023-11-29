@@ -20,6 +20,27 @@ RUYISDK mugen 测试分支
    + [ruyi-test-jammy-x86_64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-jammy-x86_64-logs_failed.tar.gz)
    + [ruyi-test-revyos-riscv64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-revyos-riscv64-logs_failed.tar.gz)
 
+测试支持 redhat/debian 系发行版
+
+在测试用例中显示安装软件包示例如下
+
+```bash
+DNF_INSTALL git
+APT_INSTALL git
+```
+
+由于软件包名称可能不同，两个函数都需要调用
+
+在测试用例运行结束时移除因测试需求而安装的软件包示例如下
+
+```bash
+PKG_REMOVE
+```
+
+不需要任何参数
+
+注意，这样的设计假定了你的发行版中没有同时存在 ``dnf`` 和 ``apt-get``
+
 ## mugen介绍
 mugen是openEuler社区开放的测试框架，提供公共配置和方法以便社区开发者进行测试代码的编写和执行
 

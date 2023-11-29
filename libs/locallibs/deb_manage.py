@@ -76,7 +76,7 @@ def deb_install(pkgs, node=1, tmpfile=""):
         mugen_log.logging("info", "unsupported package manager: apt-get")
         return 0, None
 
-    repoCode, result = func(conn=conn, cmd="apt-get --assume-no --no-show-upgraded --no-install-recommends install" +
+    repoCode, result = func(conn=conn, cmd="apt-get --assume-no --no-show-upgraded --no-install-recommends install " +
                                            pkgs)
     # repoCode: 0 already the newest version, 1 something can be done but N, 100 no such package
     if repoCode not in [0, 1]:

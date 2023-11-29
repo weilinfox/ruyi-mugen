@@ -96,7 +96,7 @@ def deb_install(pkgs, node=1, tmpfile=""):
         conn=conn,
         cmd="apt-get --assume-no --no-show-upgraded --no-install-recommends install "
         + pkgs
-        + ' 2>&1 | grep -iA 1 "NEW packages will be installed" | tail -n 1'
+        + ' 2>&1 | grep -iA 1000 "NEW packages will be installed" | grep -E "^  "'
     )
     if depCode != 0:
         return depCode, depList

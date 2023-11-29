@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
- Copyright (c) [2021] Huawei Technologies Co.,Ltd.ALL rights reserved.
+ Copyright (c) [2023] ISCAS PLCT.ALL rights reserved.
  This program is licensed under Mulan PSL v2.
  You can use it according to the terms and conditions of the Mulan PSL v2.
           http://license.coscl.org.cn/MulanPSL2
@@ -9,12 +9,12 @@
  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  See the Mulan PSL v2 for more details.
 
- @Author  : lemon-higgins
- @email   : lemon.higgins@aliyun.com
- @Date    : 2021-04-22 11:37:36
+ @Author  : weilinfox
+ @email   : caiweilin@iscas.ac.cn
+ @Date    : 2023-11-29 16:03:10
  @License : Mulan PSL v2
  @Version : 1.0
- @Desc    : 软件包的安装卸载
+ @Desc    : deb 软件包的安装卸载
 """
 
 import os
@@ -43,7 +43,7 @@ def local_cmd(cmd, conn=None):
     return exitcode, output
 
 
-def rpm_install(pkgs, node=1, tmpfile=""):
+def deb_install(pkgs, node=1, tmpfile=""):
     """安装软件包
 
     Args:
@@ -71,54 +71,37 @@ def rpm_install(pkgs, node=1, tmpfile=""):
         )
         func = ssh_cmd.pssh_cmd
 
-    result = func(conn=conn, cmd="whereis -b dnf | cut -d':' -f2")[1]
+    result = func(conn=conn, cmd="whereis -b apt-get | cut -d':' -f2")[1]
     if result.strip() == "":
-        mugen_log.logging("info", "unsupported package manager: dnf")
+        mugen_log.logging("info", "unsupported package manager: apt-get")
         return 0, None
 
-    result = func(conn=conn, cmd="dnf --assumeno install " + pkgs)[1]
-    if "is already installed" in result and "Nothing to do" in result:
+    repoCode, result = func(conn=conn, cmd="apt-get --assume-no --no-show-upgraded --no-install-recommends install" +
+                                           pkgs)
+    # repoCode: 0 already the newest version, 1 something can be done but N, 100 no such package
+    if repoCode not in [0, 1]:
+        return repoCode, result
+    elif repoCode == 0 and "already the newest version" in result:
         mugen_log.logging("info", "pkgs:(%s) is already installed" % pkgs)
         return 0, None
 
     repoCode, repoList = func(
         conn=conn,
-        cmd="dnf repolist | awk '{print $NF}' | sed -e '1d;:a;N;$!ba;s/\\n/ /g'",
+        cmd="apt-get update",
     )
     if repoCode != 0:
         return repoCode, repoList
-    upCode, upList = func(
+
+    depCode, depList = func(
         conn=conn,
-        cmd="dnf --assumeno install "
+        cmd="apt-get --assume-no --no-show-upgraded --no-install-recommends install "
         + pkgs
-        + " 2>&1| grep -A 1000 \"Upgrading:\" | grep update | grep -wE \"$(uname -m)|noarch\"|awk '{print $1}'|xargs",
+        + ' 2>&1 | grep -iA 1 "NEW packages will be installed" | tail -n 1'
     )
-    if upCode != 0:
-        return upCode, upList
-    if len(upList) == 0:
-        depCode, depList = func(
-            conn=conn,
-            cmd="dnf --assumeno install "
-            + pkgs
-            + ' 2>&1 | grep -wE "$(echo '
-            + repoList
-            + " | sed 's/ /|/g')\" | grep -wE \"$(uname -m)|noarch\"| awk '{print $1}'",
-        )
-    else:
-        depCode, depList = func(
-            conn=conn,
-            cmd="dnf --assumeno install "
-            + pkgs
-            + ' 2>&1 | grep -wE "$(echo '
-            + repoList
-            + " | sed 's/ /|/g')\" | grep -wE \"$(uname -m)|noarch\"| grep -vE \"$(echo "
-            + upList
-            + " | sed 's/ /|/g')\" | awk '{print $1}'",
-        )
     if depCode != 0:
         return depCode, depList
 
-    exitcode, result = func(conn=conn, cmd="dnf -y install " + pkgs)
+    exitcode, result = func(conn=conn, cmd="apt-get --assume-yes --no-install-recommends install " + pkgs)
 
     if tmpfile == "":
         tmpfile = tempfile.mkstemp(dir="/tmp")[1]
@@ -133,12 +116,12 @@ def rpm_install(pkgs, node=1, tmpfile=""):
     return exitcode, result
 
 
-def rpm_remove(node=1, pkgs="", tmpfile=""):
+def deb_remove(pkgs="", node=1, tmpfile=""):
     """卸载软件包
 
     Args:
-        node (int, optional): 节点号. Defaults to 1.
         pkgs (str, optional): 需要卸载的软件包. Defaults to "".
+        node (int, optional): 节点号. Defaults to 1.
         tmpfile (str, optional): 安装时所有涉及的包. Defaults to "".
 
     Returns:
@@ -163,9 +146,9 @@ def rpm_remove(node=1, pkgs="", tmpfile=""):
         )
         func = ssh_cmd.pssh_cmd
 
-    result = func(conn=conn, cmd="whereis -b dnf | cut -d':' -f2")[1]
+    result = func(conn=conn, cmd="whereis -b apt-get | cut -d':' -f2")[1]
     if result.strip() == "":
-        mugen_log.logging("info", "unsupported package manager: dnf")
+        mugen_log.logging("info", "unsupported package manager: apt-get")
         return 0, None
 
     depList = ""
@@ -173,7 +156,7 @@ def rpm_remove(node=1, pkgs="", tmpfile=""):
         with open(tmpfile, "r") as f:
             depList = f.read()
 
-    exitcode = func(conn=conn, cmd="dnf -y remove " + pkgs + " " + depList)[0]
+    exitcode = func(conn=conn, cmd="apt-get -y remove " + pkgs + " " + depList)[0]
     if localtion != "local":
         ssh_cmd.pssh_close(conn)
     return exitcode
@@ -182,7 +165,7 @@ def rpm_remove(node=1, pkgs="", tmpfile=""):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
-        usage="rpm_manage.py install|remove [-h] [--node NODE] [--pkgs PKG] [--tempfile TEPMFILE]",
+        usage="deb_manage.py install|remove [-h] [--node NODE] [--pkgs PKG] [--tempfile TEPMFILE]",
         description="manual to this script",
     )
     parser.add_argument(
@@ -194,16 +177,16 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if sys.argv[1] == "install":
-        exitcode, output = rpm_install(args.pkgs, args.node, args.tempfile)
+        exitcode, output = deb_install(args.pkgs, args.node, args.tempfile)
         if output is not None:
             print(output)
         sys.exit(exitcode)
     elif sys.argv[1] == "remove":
-        exitcode = rpm_remove(args.node, args.pkgs, args.tempfile)
+        exitcode = deb_remove(args.pkgs, args.node, args.tempfile)
         sys.exit(exitcode)
     else:
         mugen_log.logging(
             "error",
-            "usage: rpm_manage.py install|remove [-h] [--node NODE] [--pkg PKG] [--tempfile TEPMFILE]",
+            "usage: deb_manage.py install|remove [-h] [--node NODE] [--pkg PKG] [--tempfile TEPMFILE]",
         )
         sys.exit(1)

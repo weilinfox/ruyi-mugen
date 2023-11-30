@@ -15,6 +15,10 @@
         },
         {
             "name": "oe_test_ruyi_admin"
+        },
+        {
+            "name": "oe_test_ruyi_cmake_ninja"
         }
+
     ]
 }

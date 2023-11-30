@@ -49,10 +49,10 @@ function run_test() {
     cd "./zlib-ng-2.1.5"
     ruyi venv -t gnu-plct milkv-duo ./zlib_venv
     . zlib_venv/bin/ruyi-activate
-    cmake . -G Ninja -DCMAKE_C_COMPILER=riscv64-plct-linux-gnu-gcc -DCMAKE_INSTALL_PREFIX="$(pwd)/sysroot/zlib_my_install" -DCMAKE_C_FLAGS="-O2 -pipe -g" -DZLIB_COMPAT=ON -DWITH_GTEST=OFF
+    cmake . -G Ninja -DCMAKE_C_COMPILER=riscv64-plct-linux-gnu-gcc -DCMAKE_INSTALL_PREFIX="$(pwd)/zlib_my_install" -DCMAKE_C_FLAGS="-O2 -pipe -g" -DZLIB_COMPAT=ON -DWITH_GTEST=OFF
     ninja
     ninja install
-    ls "$(pwd)/sysroot/include"
+    ls "$(pwd)/zlib_my_install/include"
     CHECK_RESULT $? 0 0 "Check ruyi zlib-ng build failed"
     ruyi-deactivate
     cd ..

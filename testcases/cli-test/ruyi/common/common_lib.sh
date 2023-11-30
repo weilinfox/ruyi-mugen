@@ -51,22 +51,23 @@ remove_src_ruyi() {
 }
 
 install_ruyi() {
+	DNF_INSTALL "git tar xz zstd"
+	APT_INSTALL "git tar xz-utils zstd"
+
 	arch='amd64'
 	if [ "$(uname -m)" == "riscv64" ]; then arch='riscv64'; fi
 	curl -L -o ruyi https://mirror.iscas.ac.cn/ruyisdk/ruyi/testing/ruyi.${arch}.20231126
 	chmod +x ruyi
 	ln -s $(realpath ruyi) /usr/bin/ruyi
 	rm -rf $(get_ruyi_dir)
-
-	DNF_INSTALL "git tar xz zstd"
-	APT_INSTALL "git tar xz-utils zstd"
 }
 
 remove_ruyi() {
+	PKG_REMOVE
+
 	rm -f ruyi
 	rm -f /usr/bin/ruyi
 	export RUYI_DEBUG=
 	rm -rf $(get_ruyi_dir)
-	PKG_REMOVE
 }
 

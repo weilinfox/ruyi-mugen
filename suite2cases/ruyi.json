@@ -12,6 +12,9 @@
         },
         {
             "name": "oe_test_ruyi_venv"
+        },
+        {
+            "name": "oe_test_ruyi_admin"
         }
     ]
 }

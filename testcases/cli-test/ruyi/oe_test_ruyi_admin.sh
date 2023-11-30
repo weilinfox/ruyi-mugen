@@ -11,9 +11,9 @@
 # #############################################
 # @Author    :   weilinfox
 # @Contact   :   caiweilin@iscas.ac.cn
-# @Date      :   2023/11/28
+# @Date      :   2023/11/30
 # @License   :   Mulan PSL v2
-# @Desc      :   ruyisdk venv test
+# @Desc      :   ruyisdk admin test
 # #############################################
 
 source "./common/common_lib.sh"
@@ -27,20 +27,9 @@ function pre_test() {
 function run_test() {
     LOG_INFO "Start to run test."
 
-    ruyi update
-    ruyi install gnu-plct
-    ruyi venv --toolchain gnu-plct milkv-duo test-venv 2>&1 | grep "The virtual environment is now created."
-    CHECK_RESULT $? 0 0 "Check ruyi venv install failed"
-    [ -f ./test-venv/bin/ruyi-activate ]
-    CHECK_RESULT $? 0 0 "Check ruyi venv activate file failed"
-    oldps1="$PS1"
-    source ./test-venv/bin/ruyi-activate
-    echo "$PS1" | grep test-venv
-    CHECK_RESULT $? 0 0 "Check activate ruyi venv PS1 failed"
-    ruyi-deactivate
-    [ "$oldps1" == "$PS1" ]
-    CHECK_RESULT $? 0 0 "Check deactivate ruyi venv PS1 failed"
-    rm -rf test-venv
+    test_file=oe_test_ruyi_admin.sh
+    ruyi admin manifest $test_file
+    CHECK_RESULT $? 0 0 "Check ruyi admin manifest failed"
 
     LOG_INFO "End of the test."
 }

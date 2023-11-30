@@ -21,8 +21,8 @@ source "./common/common_lib.sh"
 function pre_test() {
     LOG_INFO "Start environmental preparation."
     install_ruyi || LOG_ERROR "Install ruyi error"
-    DNF_INSTALL cmake ninja-build
-    APT_INSTALL cmake ninja-build
+    DNF_INSTALL "cmake ninja-build"
+    APT_INSTALL "cmake ninja-build"
     LOG_INFO "End of environmental preparation!"
 }
 

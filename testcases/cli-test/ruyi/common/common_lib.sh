@@ -58,8 +58,8 @@ install_ruyi() {
 	ln -s $(realpath ruyi) /usr/bin/ruyi
 	rm -rf $(get_ruyi_dir)
 
-	DNF_INSTALL git tar xz zstd
-	APT_INSTALL git tar xz-utils zstd
+	DNF_INSTALL "git tar xz zstd"
+	APT_INSTALL "git tar xz-utils zstd"
 }
 
 remove_ruyi() {

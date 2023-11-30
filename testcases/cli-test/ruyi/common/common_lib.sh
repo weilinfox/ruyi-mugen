@@ -57,6 +57,9 @@ install_ruyi() {
 	chmod +x ruyi
 	ln -s $(realpath ruyi) /usr/bin/ruyi
 	rm -rf $(get_ruyi_dir)
+
+	DNF_INSTALL git tar xz zstd
+	APT_INSTALL git tar xz-utils zstd
 }
 
 remove_ruyi() {
@@ -64,5 +67,6 @@ remove_ruyi() {
 	rm -f /usr/bin/ruyi
 	export RUYI_DEBUG=
 	rm -rf $(get_ruyi_dir)
+	PKG_REMOVE
 }
 

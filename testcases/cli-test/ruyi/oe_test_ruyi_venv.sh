@@ -20,8 +20,6 @@ source "./common/common_lib.sh"
 
 function pre_test() {
     LOG_INFO "Start environmental preparation."
-    DNF_INSTALL git
-    APT_INSTALL git
     install_ruyi || LOG_ERROR "Install ruyi error"
     LOG_INFO "End of environmental preparation!"
 }
@@ -50,7 +48,6 @@ function run_test() {
 function post_test() {
     LOG_INFO "start environment cleanup."
     remove_ruyi
-    PKG_REMOVE
     LOG_INFO "Finish environment cleanup!"
 }
 

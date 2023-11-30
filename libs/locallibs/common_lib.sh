@@ -90,9 +90,9 @@ function main() {
         trap POST_TEST_DEFAULT EXIT INT HUP TERM || exit 1
     fi
 
-    if ! rpm -qa | grep expect >/dev/null 2>&1; then
-        dnf -y install expect
-    fi
+    #if ! rpm -qa | grep expect >/dev/null 2>&1; then
+    #    dnf -y install expect
+    #fi
 
     if [ -n "$(type -t config_params)" ]; then
         config_params

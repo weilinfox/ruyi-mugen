@@ -63,6 +63,13 @@ function run_test() {
     [ -d $default_ruyi_data_dir ]
     CHECK_RESULT $? 0 1 "Check ruyi create default data directory failed"
 
+    ruyi self uninstall --purge -y
+    CHECK_RESULT $? 0 0 "Check ruyi xdg self purge failed"
+    [ -d $xdg_ruyi_dir ]
+    CHECK_RESULT $? 0 1 "Check ruyi xdg purge cache dir exists failed"
+    [ -d $xdg_ruyi_data_dir ]
+    CHECK_RESULT $? 0 1 "Check ruyi xdg purge data dir exists failed"
+
     rm -rf $XDG_CACHE_HOME
     rm -rf $XDG_DATA_HOME
     export XDG_CACHE_HOME=

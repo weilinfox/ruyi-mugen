@@ -71,6 +71,24 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi extract dir not enpty failed"
     cd .. && rm -rf source-test
 
+    ruyi self uninstall -y
+    CHECK_RESULT $? 0 0 "Check ruyi self uninstall failed"
+    ruyi version
+    CHECK_RESULT $? 0 1 "Check ruyi uninstall exists failed"
+    [ -d "~/.cache/ruyi" ]
+    CHECK_RESULT $? 0 0 "Check ruyi cache dir exists failed"
+    [ -d "~/.local/share/ruyi" ]
+    CHECK_RESULT $? 0 0 "Check ruyi data dir exists failed"
+    INSTALL_RUYI
+    ruyi self uninstall --purge -y
+    CHECK_RESULT $? 0 0 "Check ruyi self purge failed"
+    ruyi version
+    CHECK_RESULT $? 0 1 "Check ruyi purge exists failed"
+    [ -d "~/.cache/ruyi" ]
+    CHECK_RESULT $? 0 1 "Check ruyi purge cache dir exists failed"
+    [ -d "~/.local/share/ruyi" ]
+    CHECK_RESULT $? 0 1 "Check ruyi purge data dir exists failed"
+
     LOG_INFO "End of the test."
 }
 

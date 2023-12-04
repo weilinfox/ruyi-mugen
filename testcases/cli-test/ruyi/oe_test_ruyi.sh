@@ -56,9 +56,9 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi profile failed"
 
     pkgnames=$(ruyi list | grep -e "^* toolchain" | cut -d'/' -f 2)
-    for p in "$pkgnames"; do
-        s=$(ruyi list | grep "slug: $pkgname" | grep -v "no binary for current host")
-        if [ -z "$s" ]; then
+    for p in $pkgnames; do
+        s=$(ruyi list | grep -E "slug: ${p}-[0-9]+" | grep -v "no binary for current host")
+        if [ ! -z "$s" ]; then
             pkgname="$p"
             break
         fi

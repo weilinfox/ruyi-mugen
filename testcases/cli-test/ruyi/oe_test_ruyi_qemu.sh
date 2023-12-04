@@ -27,15 +27,17 @@ function pre_test() {
 function run_test() {
     LOG_INFO "Start to run test."
 
-    if [ "$(uname -m)" == "riscv64" ]; then
-        LOG_INFO "Skip test."
-        exit 0
-    fi
-
     mkdir qemu_test
     cd qemu_test
 
     ruyi update
+
+    pe=$(ruyi list | grep -E "slug: qemu-user-riscv-upstream-[0-9]+" | grep -v "no binary for current host")
+    if [ -z "$pe" ]; then
+        LOG_INFO "No qemu-user-riscv-upstream available for current host $(uname -m), skip"
+        exit 0
+    fi
+
     ruyi install gnu-plct qemu-user-riscv-upstream
     CHECK_RESULT $? 0 0 "Check ruyi toolchain install failed"
     ruyi venv -t gnu-plct -e qemu-user-riscv-upstream milkv-duo venv

@@ -36,6 +36,13 @@ function run_test() {
     [ "$(uname -m)" == "riscv64" ] && qemu_pkg= && qemu_cmd= && qemu_bin=
 
     ruyi update
+
+    pe=$(ruyi list | grep -E "slug: llvm-upstream-[0-9]+" | grep -v "no binary for current host")
+    if [ -z "$pe" ]; then
+        LOG_INFO "No llvm-upstream available for current host $(uname -m), skip"
+        exit 0
+    fi
+
     ruyi install llvm-upstream gnu-plct $qemu_pkg
     CHECK_RESULT $? 0 0 "Check ruyi toolchain install failed"
     ruyi venv -t llvm-upstream --sysroot-from gnu-plct $qemu_cmd generic venv

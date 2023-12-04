@@ -86,11 +86,11 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi self uninstall failed"
     ruyi version
     CHECK_RESULT $? 0 1 "Check ruyi uninstall exists failed"
-    [ -d "~/.cache/ruyi" ]
+    [ -d ~/.cache/ruyi ]
     CHECK_RESULT $? 0 0 "Check ruyi cache dir exists failed"
-    [ -d "~/.local/share/ruyi" ]
+    [ -d ~/.local/share/ruyi ]
     CHECK_RESULT $? 0 0 "Check ruyi data dir exists failed"
-    INSTALL_RUYI
+    install_ruyi
     ruyi self uninstall --purge -y
     CHECK_RESULT $? 0 0 "Check ruyi self purge failed"
     ruyi version

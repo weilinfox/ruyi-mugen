@@ -55,13 +55,24 @@ function run_test() {
     ruyi list profiles
     CHECK_RESULT $? 0 0 "Check ruyi profile failed"
 
-    pkgname=$(ruyi list | grep -e "^* toolchain" | head -n 1 | cut -d'/' -f 2)
-    ruyi install $pkgname
-    CHECK_RESULT $? 0 0 "Check ruyi install package failed"
-    ruyi install $pkgname 2>&1 | grep "skipping already installed package"
-    CHECK_RESULT $? 0 0 "Check ruyi install duplicate package failed"
-    ruyi install name:$pkgname 2>&1 | grep "skipping already installed package"
-    CHECK_RESULT $? 0 0 "Check ruyi install duplicate package by name failed"
+    pkgnames=$(ruyi list | grep -e "^* toolchain" | cut -d'/' -f 2)
+    for p in "$pkgnames"; do
+        s=$(ruyi list | grep "slug: $pkgname" | grep -v "no binary for current host")
+        if [ -z "$s" ]; then
+            pkgname="$p"
+            break
+        fi
+    done
+    if [ -z "$pkgname" ]; then
+        LOG_INFO "No supported binary package found"
+    else
+        ruyi install $pkgname
+        CHECK_RESULT $? 0 0 "Check ruyi install package failed"
+        ruyi install $pkgname 2>&1 | grep "skipping already installed package"
+        CHECK_RESULT $? 0 0 "Check ruyi install duplicate package failed"
+        ruyi install name:$pkgname 2>&1 | grep "skipping already installed package"
+        CHECK_RESULT $? 0 0 "Check ruyi install duplicate package by name failed"
+    fi
 
     pkgname=$(ruyi list | grep -e "^* source" | head -n 1 | cut -d'/' -f 2)
     mkdir source-test && cd source-test

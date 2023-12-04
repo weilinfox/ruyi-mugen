@@ -79,11 +79,8 @@ def deb_install(pkgs, node=1, tmpfile=""):
     repoCode, result = func(conn=conn, cmd="apt-get --simulate --no-show-upgraded --no-install-recommends install " +
                                            pkgs)
     # repoCode: 0 already the newest version, 1 something can be done but N, 100 no such package
-    if repoCode not in [0, 1]:
+    if repoCode != 0:
         return repoCode, result
-    elif repoCode == 0 and "already the newest version" in result:
-        mugen_log.logging("info", "pkgs:(%s) is already installed" % pkgs)
-        return 0, None
 
     repoCode, repoList = func(
         conn=conn,
@@ -99,7 +96,8 @@ def deb_install(pkgs, node=1, tmpfile=""):
         + ' 2>&1 | grep -iA 1000 "NEW packages will be installed" | grep -E "^  "'
     )
     if depCode != 0:
-        return depCode, depList
+        mugen_log.logging("info", "pkgs:(%s) is already installed" % pkgs)
+        return 0, None
 
     exitcode, result = func(conn=conn, cmd="apt-get --assume-yes --no-install-recommends install " + pkgs)
 

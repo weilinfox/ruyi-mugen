@@ -15,7 +15,9 @@
         },
         {
             "name": "oe_test_ruyi_cmake_ninja"
+        },
+        {
+            "name": "oe_test_ruyi_qemu"
         }
-
     ]
 }

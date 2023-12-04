@@ -54,9 +54,12 @@ install_ruyi() {
 	DNF_INSTALL "git tar xz zstd"
 	APT_INSTALL "git tar xz-utils zstd"
 
+	version="20231203"
 	arch='amd64'
-	if [ "$(uname -m)" == "riscv64" ]; then arch='riscv64'; fi
-	curl -L -o ruyi https://mirror.iscas.ac.cn/ruyisdk/ruyi/testing/ruyi.${arch}.20231126
+	larch="$(uname -m)"
+	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi
+	if [ "$larch"  == "aarch64" ]; then arch='arm64'; fi
+	curl -L -o ruyi https://mirror.iscas.ac.cn/ruyisdk/ruyi/testing/ruyi.${arch}.${version}
 	chmod +x ruyi
 	ln -s $(realpath ruyi) /usr/bin/ruyi
 	rm -rf $(get_ruyi_dir)

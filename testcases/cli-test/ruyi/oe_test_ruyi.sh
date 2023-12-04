@@ -66,7 +66,9 @@ function run_test() {
     if [ -z "$pkgname" ]; then
         LOG_INFO "No supported binary package found"
     else
-        ruyi install $pkgname
+        http_proxy=http://wrong.proxy https_proxy=http://wrong.proxy ruyi install $pkgname
+        CHECK_RESULT $? 0 1 "Check ruyi install package from wrong proxy failed"
+        ruyi install $pkgname 2>&1 | grep "downloading"
         CHECK_RESULT $? 0 0 "Check ruyi install package failed"
         ruyi install $pkgname 2>&1 | grep "skipping already installed package"
         CHECK_RESULT $? 0 0 "Check ruyi install duplicate package failed"

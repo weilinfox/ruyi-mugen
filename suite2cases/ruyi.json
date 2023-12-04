@@ -18,6 +18,9 @@
         },
         {
             "name": "oe_test_ruyi_qemu"
+        },
+        {
+            "name": "oe_test_ruyi_llvm"
         }
     ]
 }

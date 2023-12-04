@@ -13,7 +13,7 @@
 # @Contact   :   caiweilin@iscas.ac.cn
 # @Date      :   2023/12/04
 # @License   :   Mulan PSL v2
-# @Desc      :   ruyisdk qemu test
+# @Desc      :   ruyisdk simple llvm test
 # #############################################
 
 source "./common/common_lib.sh"
@@ -27,18 +27,13 @@ function pre_test() {
 function run_test() {
     LOG_INFO "Start to run test."
 
-    if [ "$(uname -m)" == "riscv64" ]; then
-        LOG_INFO "Skip test."
-        exit 0
-    fi
-
-    mkdir qemu_test
-    cd qemu_test
+    mkdir llvm_test
+    cd llvm_test
 
     ruyi update
-    ruyi install gnu-plct qemu-user-riscv-upstream
+    ruyi install llvm-upstream gnu-plct qemu-user-riscv-upstream
     CHECK_RESULT $? 0 0 "Check ruyi toolchain install failed"
-    ruyi venv -t gnu-plct -e qemu-user-riscv-upstream milkv-duo venv
+    ruyi venv -t llvm-upstream --sysroot-from gnu-plct -e qemu-user-riscv-upstream generic venv
     CHECK_RESULT $? 0 0 "Check ruyi venv creation failed"
 
     . venv/bin/ruyi-activate
@@ -54,14 +49,14 @@ int main()
 }
 EOF
 
-    riscv64-plct-linux-gnu-gcc hello_ruyi.c -o hello_ruyi.o
-    CHECK_RESULT $? 0 0 "Check ruyi compilation failed"
+    clang -O3 hello_ruyi.c -o hello_ruyi.o
+    CHECK_RESULT $? 0 0 "Check ruyi llvm compilation failed"
     ruyi-qemu ./hello_ruyi.o | grep "hello, ruyi"
     CHECK_RESULT $? 0 0 "Check ruyi emulation failed"
 
     ruyi-deactivate
     cd ..
-    rm -rf qemu_test
+    rm -rf llvm_test
 
     LOG_INFO "End of the test."
 }

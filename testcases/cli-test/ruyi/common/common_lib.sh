@@ -24,6 +24,12 @@ get_ruyi_dir() {
 	echo "$ruyibase"/ruyi
 }
 
+get_ruyi_data_dir() {
+	ruyibase=$XDG_DATA_HOME
+	[ "$ruyibase" == "" ] && ruyibase=~/.local/share
+	echo "$ruyibase"/ruyi
+}
+
 install_src_ruyi() {
 	curl -L -o ruyi.tar.gz https://github.com/ruyisdk/ruyi/archive/refs/heads/main.tar.gz
 	tar -zxvf ruyi.tar.gz
@@ -71,6 +77,6 @@ remove_ruyi() {
 	rm -f ruyi
 	rm -f /usr/bin/ruyi
 	export RUYI_DEBUG=
-	rm -rf $(get_ruyi_dir)
+	rm -rf $(get_ruyi_dir) $(get_ruyi_data_dir)
 }
 

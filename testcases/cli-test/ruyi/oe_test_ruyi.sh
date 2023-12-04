@@ -29,6 +29,8 @@ function run_test() {
 
     ruyi
     CHECK_RESULT $? 0 1 "Check ruyi empty cmdline failed"
+    ruyi --version | grep "$version"
+    CHECK_RESULT $? 0 1 "Check ruyi version failed"
     ruyi 2>&1 |grep usage
     CHECK_RESULT $? 0 0 "Check ruyi empty cmdline help failed"
     ruyi -h | grep usage

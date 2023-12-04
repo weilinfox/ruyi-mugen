@@ -13,7 +13,7 @@
 # @Contact   :   caiweilin@iscas.ac.cn
 # @Date      :   2023/10/30
 # @License   :   Mulan PSL v2
-# @Desc      :   ruyisdk cache location tests
+# @Desc      :   ruyisdk file location tests
 # #############################################
 
 source "./common/common_lib.sh"
@@ -27,9 +27,12 @@ function pre_test() {
 function run_test() {
     LOG_INFO "Start to run test."
     export XDG_CACHE_HOME=~/.cache/test
-    mkdir $XDG_CACHE_HOME
+    export XDG_DATA_HOME=~/.local/share/test
+    mkdir $XDG_CACHE_HOME $XDG_DATA_HOME
     xdg_ruyi_dir="$XDG_CACHE_HOME"/ruyi
+    xdg_ruyi_data_dir="$XDG_DATA_HOME"/ruyi
     default_ruyi_dir=~/.cache/ruyi
+    default_ruyi_data_dir=~/.local/share/ruyi
 
     ruyi list
     CHECK_RESULT $? 0 0 "Check ruyi empty list failed"
@@ -55,8 +58,15 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi create xdg based cache directory failed"
     [ -d $default_ruyi_dir ]
     CHECK_RESULT $? 0 1 "Check ruyi create default cache directory failed"
+    [ -d $xdg_ruyi_data_dir ]
+    CHECK_RESULT $? 0 0 "Check ruyi create xdg based data directory failed"
+    [ -d $default_ruyi_data_dir ]
+    CHECK_RESULT $? 0 1 "Check ruyi create default data directory failed"
+
     rm -rf $XDG_CACHE_HOME
+    rm -rf $XDG_DATA_HOME
     export XDG_CACHE_HOME=
+    export XDG_DATA_HOME=
 
     LOG_INFO "End of the test."
 }

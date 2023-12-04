@@ -5,7 +5,7 @@
             "name": "oe_test_ruyi"
         },
         {
-            "name": "oe_test_ruyi_cachedir"
+            "name": "oe_test_ruyi_xdg"
         },
         {
             "name": "oe_test_ruyi_wrong_proxy"

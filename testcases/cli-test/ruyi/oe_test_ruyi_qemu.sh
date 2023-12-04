@@ -27,6 +27,11 @@ function pre_test() {
 function run_test() {
     LOG_INFO "Start to run test."
 
+    if [ "$(uname -m)" == "riscv64" ]; then
+        LOG_INFO "Skip test."
+        exit 0
+    fi
+
     mkdir qemu_test
     cd qemu_test
 

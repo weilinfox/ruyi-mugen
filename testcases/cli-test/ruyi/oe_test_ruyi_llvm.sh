@@ -30,10 +30,15 @@ function run_test() {
     mkdir llvm_test
     cd llvm_test
 
+    qemu_pkg=qemu-user-riscv-upstream
+    qemu_cmd="-e qemu-user-riscv-upstream"
+    qemu_bin=ruyi-qemu
+    [ "$(uname -m)" == "riscv64" ] && qemu_pkg= && qemu_cmd= && qemu_bin=
+
     ruyi update
-    ruyi install llvm-upstream gnu-plct qemu-user-riscv-upstream
+    ruyi install llvm-upstream gnu-plct $qemu_pkg
     CHECK_RESULT $? 0 0 "Check ruyi toolchain install failed"
-    ruyi venv -t llvm-upstream --sysroot-from gnu-plct -e qemu-user-riscv-upstream generic venv
+    ruyi venv -t llvm-upstream --sysroot-from gnu-plct $qemu_cmd generic venv
     CHECK_RESULT $? 0 0 "Check ruyi venv creation failed"
 
     . venv/bin/ruyi-activate
@@ -51,8 +56,8 @@ EOF
 
     clang -O3 hello_ruyi.c -o hello_ruyi.o
     CHECK_RESULT $? 0 0 "Check ruyi llvm compilation failed"
-    ruyi-qemu ./hello_ruyi.o | grep "hello, ruyi"
-    CHECK_RESULT $? 0 0 "Check ruyi emulation failed"
+    $qemu_bin ./hello_ruyi.o | grep "hello, ruyi"
+    CHECK_RESULT $? 0 0 "Check ruyi binary failed"
 
     ruyi-deactivate
     cd ..

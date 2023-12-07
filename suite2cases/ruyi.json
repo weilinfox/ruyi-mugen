@@ -20,6 +20,9 @@
             "name": "oe_test_ruyi_qemu"
         },
         {
+            "name": "oe_test_ruyi_xthead_qemu"
+        },
+        {
             "name": "oe_test_ruyi_llvm"
         }
     ]

@@ -11,9 +11,9 @@
 # #############################################
 # @Author    :   weilinfox
 # @Contact   :   caiweilin@iscas.ac.cn
-# @Date      :   2023/12/04
+# @Date      :   2023/12/07
 # @License   :   Mulan PSL v2
-# @Desc      :   ruyisdk qemu test
+# @Desc      :   ruyisdk xthead qemu test
 # #############################################
 
 source "./common/common_lib.sh"
@@ -32,16 +32,16 @@ function run_test() {
 
     ruyi update
 
-    pe=$(ruyi list | awk '/* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /* emulator\/qemu-user-riscv-upstream/ {if (f==0) f=1}' | grep -v "no binary for current host")
+    pe=$(ruyi list | awk '/* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /* emulator\/qemu-user-riscv-xthead/ {if (f==0) f=1}' | grep -v "no binary for current host")
     if [ -z "$pe" ]; then
-        LOG_INFO "No qemu-user-riscv-upstream available for current host $(uname -m), skip"
+        LOG_INFO "No qemu-user-riscv-xthead available for current host $(uname -m), skip"
         exit 0
     fi
 
-    ruyi install gnu-plct qemu-user-riscv-upstream
-    CHECK_RESULT $? 0 0 "Check ruyi toolchain install failed"
-    ruyi venv -t gnu-plct -e qemu-user-riscv-upstream milkv-duo venv
-    CHECK_RESULT $? 0 0 "Check ruyi venv creation failed"
+    ruyi install gnu-plct-xthead qemu-user-riscv-xthead
+    CHECK_RESULT $? 0 0 "Check ruyi xthead toolchain install failed"
+    ruyi venv -t gnu-plct-xthead -e qemu-user-riscv-xthead sipeed-lpi4a venv
+    CHECK_RESULT $? 0 0 "Check ruyi xthead venv creation failed"
 
     . venv/bin/ruyi-activate
 
@@ -56,7 +56,7 @@ int main()
 }
 EOF
 
-    riscv64-plct-linux-gnu-gcc hello_ruyi.c -o hello_ruyi.o
+    riscv64-plctxthead-linux-gnu-gcc hello_ruyi.c -o hello_ruyi.o
     CHECK_RESULT $? 0 0 "Check ruyi compilation failed"
     ruyi-qemu ./hello_ruyi.o | grep "hello, ruyi"
     CHECK_RESULT $? 0 0 "Check ruyi emulation failed"

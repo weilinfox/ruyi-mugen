@@ -32,8 +32,8 @@ function run_test() {
 
     ruyi update
 
-    pe=$(ruyi list | awk '/* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /* emulator\/qemu-user-riscv-xthead/ {if (f==0) f=1}' | grep -v "no binary for current host")
-    if [ -z "$pe" ]; then
+    pe=$(ruyi list | awk '/\* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /\* emulator\/qemu-user-riscv-xthead/ {if (f==0) f=1}' | grep -v "no binary for current host")
+    if [ -z $pe ]; then
         LOG_INFO "No qemu-user-riscv-xthead available for current host $(uname -m), skip"
         exit 0
     fi

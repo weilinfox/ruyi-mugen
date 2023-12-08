@@ -55,7 +55,7 @@ function run_test() {
 
     pkgnames=$(ruyi list | grep -e "^* toolchain" | cut -d'/' -f 2)
     for p in $pkgnames; do
-        s=$(ruyi list | awk '/\* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /\* toolchain\/'$p'/ {if (f==0) f=1}' | grep -v "no binary for current host")
+        s=$(ruyi list | awk '/\* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /\* toolchain\/'$p'/ {if (f==0) f=1}' | grep -e "^  -" | grep -v "no binary for current host")
         if [ ! -z "$s" ]; then
             pkgname="$p"
             break

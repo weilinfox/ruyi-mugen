@@ -60,7 +60,7 @@ install_ruyi() {
 	DNF_INSTALL "git tar bzip2 xz zstd"
 	APT_INSTALL "git tar bzip2 xz-utils zstd"
 
-	version="20231207"
+	version="20231211"
 	arch='amd64'
 	larch="$(uname -m)"
 	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi

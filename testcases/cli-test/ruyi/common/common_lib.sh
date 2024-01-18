@@ -30,6 +30,12 @@ get_ruyi_data_dir() {
 	echo "$ruyibase"/ruyi
 }
 
+get_ruyi_state_dir() {
+	ruyibase=$XDG_STATE_HOME
+	[ "$ruyibase" == "" ] && ruyibase=~/.local/state
+	echo "$ruyibase"/ruyi
+}
+
 install_src_ruyi() {
 	curl -L -o ruyi.tar.gz https://github.com/ruyisdk/ruyi/archive/refs/heads/main.tar.gz
 	tar -zxvf ruyi.tar.gz
@@ -56,6 +62,10 @@ remove_src_ruyi() {
 	rm -rf $(get_ruyi_dir)
 }
 
+remove_ruyi_data() {
+	rm -rf $(get_ruyi_dir) $(get_ruyi_data_dir) $(get_ruyi_state_dir)
+}
+
 install_ruyi() {
 	DNF_INSTALL "git tar bzip2 xz zstd"
 	APT_INSTALL "git tar bzip2 xz-utils zstd"
@@ -68,15 +78,16 @@ install_ruyi() {
 	curl -L -o ruyi https://mirror.iscas.ac.cn/ruyisdk/ruyi/testing/ruyi.${arch}.${version}
 	chmod +x ruyi
 	ln -s $(realpath ruyi) /usr/bin/ruyi
-	rm -rf $(get_ruyi_dir)
+	# remove_ruyi_data
 }
 
 remove_ruyi() {
 	PKG_REMOVE
 
+	remove_ruyi_data
+
 	rm -f ruyi
 	rm -f /usr/bin/ruyi
 	export RUYI_DEBUG=
-	rm -rf $(get_ruyi_dir) $(get_ruyi_data_dir)
 }
 

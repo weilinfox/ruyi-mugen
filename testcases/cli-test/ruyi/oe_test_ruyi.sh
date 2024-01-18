@@ -90,6 +90,9 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi cache dir exists failed"
     [ -d ~/.local/share/ruyi ]
     CHECK_RESULT $? 0 0 "Check ruyi data dir exists failed"
+    [ -d ~/.local/state/ruyi ]
+    CHECK_RESULT $? 0 0 "Check ruyi state dir exists failed"
+
     install_ruyi
     ruyi self uninstall --purge -y
     CHECK_RESULT $? 0 0 "Check ruyi self purge failed"
@@ -99,6 +102,8 @@ function run_test() {
     CHECK_RESULT $? 0 1 "Check ruyi purge cache dir exists failed"
     [ -d "~/.local/share/ruyi" ]
     CHECK_RESULT $? 0 1 "Check ruyi purge data dir exists failed"
+    [ -d "~/.local/state/ruyi" ]
+    CHECK_RESULT $? 0 1 "Check ruyi purge state dir exists failed"
 
     LOG_INFO "End of the test."
 }

@@ -26,13 +26,16 @@ function pre_test() {
 
 function run_test() {
     LOG_INFO "Start to run test."
-    export XDG_CACHE_HOME=~/.cache/test
-    export XDG_DATA_HOME=~/.local/share/test
-    mkdir $XDG_CACHE_HOME $XDG_DATA_HOME
+    export XDG_CACHE_HOME=~/.cache/ruyi_mugen_test
+    export XDG_DATA_HOME=~/.local/share/ruyi_mugen_test
+    export XDG_STATE_HOME=~/.local/state/ruyi_mugen_test
+    mkdir -p "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
     xdg_ruyi_dir="$XDG_CACHE_HOME"/ruyi
     xdg_ruyi_data_dir="$XDG_DATA_HOME"/ruyi
+    xdg_ruyi_state_dir="$XDG_STATE_HOME"/ruyi
     default_ruyi_dir=~/.cache/ruyi
     default_ruyi_data_dir=~/.local/share/ruyi
+    default_ruyi_state_dir=~/.local/state/ruyi
 
     ruyi list
     CHECK_RESULT $? 0 0 "Check ruyi empty list failed"
@@ -48,6 +51,9 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi list verbose artifacts failed"
     ruyi list --verbose | grep "Toolchain metadata"
     CHECK_RESULT $? 0 0 "Check ruyi list verbose metadata failed"
+
+    ruyi news list
+    CHECK_RESULT $? 0 0 "Check ruyi news list failed"
 
     pkgnames=$(ruyi list | grep -e "^* toolchain" | cut -d'/' -f 2)
     for p in $pkgnames; do
@@ -74,6 +80,10 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi create xdg based data directory failed"
     [ -d $default_ruyi_data_dir ]
     CHECK_RESULT $? 0 1 "Check ruyi create default data directory failed"
+    [ -d $xdg_ruyi_state_dir ]
+    CHECK_RESULT $? 0 0 "Check ruyi create xdg based state directory failed"
+    [ -d $default_ruyi_state_dir ]
+    CHECK_RESULT $? 0 1 "Check ruyi create default state directory failed"
 
     ruyi self uninstall --purge -y
     CHECK_RESULT $? 0 0 "Check ruyi xdg self purge failed"
@@ -81,11 +91,13 @@ function run_test() {
     CHECK_RESULT $? 0 1 "Check ruyi xdg purge cache dir exists failed"
     [ -d $xdg_ruyi_data_dir ]
     CHECK_RESULT $? 0 1 "Check ruyi xdg purge data dir exists failed"
+    [ -d $xdg_ruyi_state_dir ]
+    CHECK_RESULT $? 0 1 "Check ruyi xdg purge state dir exists failed"
 
-    rm -rf $XDG_CACHE_HOME
-    rm -rf $XDG_DATA_HOME
+    rm -rf "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
     export XDG_CACHE_HOME=
     export XDG_DATA_HOME=
+    export XDG_STATE_HOME=
 
     LOG_INFO "End of the test."
 }

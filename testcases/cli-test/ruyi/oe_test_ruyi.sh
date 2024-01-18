@@ -98,11 +98,11 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi self purge failed"
     ruyi version
     CHECK_RESULT $? 0 1 "Check ruyi purge exists failed"
-    [ -d "~/.cache/ruyi" ]
+    [ -d ~/.cache/ruyi ]
     CHECK_RESULT $? 0 1 "Check ruyi purge cache dir exists failed"
-    [ -d "~/.local/share/ruyi" ]
+    [ -d ~/.local/share/ruyi ]
     CHECK_RESULT $? 0 1 "Check ruyi purge data dir exists failed"
-    [ -d "~/.local/state/ruyi" ]
+    [ -d ~/.local/state/ruyi ]
     CHECK_RESULT $? 0 1 "Check ruyi purge state dir exists failed"
 
     LOG_INFO "End of the test."

@@ -24,6 +24,12 @@
         },
         {
             "name": "oe_test_ruyi_llvm"
+        },
+        {
+            "name": "oe_test_ruyi_news"
+        },
+        {
+            "name": "oe_test_ruyi_device"
         }
     ]
 }

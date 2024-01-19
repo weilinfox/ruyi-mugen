@@ -3,7 +3,7 @@
 | 测试套/软件包名 | 测试用例名 | 测试内容 |
 | :-: | :-: | :-: |
 | ruyi | oe\_test\_ruyi | 基本命令测试 |
-|  | oe\_test\_ruyi\_xdg | ``XDG\_*\_HOME`` 环境变量测试 |
+|  | oe\_test\_ruyi\_xdg | ``XDG_*_HOME`` 环境变量测试 |
 |  | oe\_test\_ruyi\_venv | ``venv`` 命令测试 |
 |  | oe\_test\_ruyi\_admin | ``admin`` 命令测试 |
 |  | oe\_test\_ruyi\_cmake\_ninja | ``make`` 、 ``cmake`` 、 ``ninja`` 构建测试 |

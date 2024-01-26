@@ -18,6 +18,8 @@
 
 source "./common/common_lib.sh"
 
+EXECUTE_T=60m
+
 function pre_test() {
     LOG_INFO "Start environmental preparation."
     install_ruyi || LOG_ERROR "Install ruyi error"

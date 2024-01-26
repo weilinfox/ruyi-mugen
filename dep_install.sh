@@ -25,13 +25,6 @@ usage() {
 }
 
 common_dep(){
-    if uname -a | grep riscv64 && cat /etc/os-release | grep -i "openEuler 23.09"; then
-        dnf install -y https://repo.tarsier-infra.com/openEuler-RISC-V/obs/hwobs_2309/noarch/python3-paramiko-3.2.0-1.oe2309.noarch.rpm \
-            https://repo.tarsier-infra.com/openEuler-RISC-V/obs/hwobs_2309/riscv64/python3-bcrypt-3.2.2-1.oe2309.riscv64.rpm \
-            https://repo.tarsier-infra.com/openEuler-RISC-V/obs/hwobs_2309/riscv64/python3-pynacl-1.5.0-1.oe2309.riscv64.rpm \
-            https://repo.tarsier-infra.com/openEuler-RISC-V/obs/hwobs_2309/noarch/python3-pyasn1-0.4.8-4.oe2309.noarch.rpm \
-            https://repo.tarsier-infra.com/openEuler-RISC-V/obs/hwobs_2309/riscv64/libsodium-1.0.18-1.oe2309.riscv64.rpm
-    fi
     apt-get update && apt-get install -y expect psmisc iputils-ping make python3-paramiko python3-six || echo Not apt distro
     dnf install expect psmisc make iputils python3-six python3-paramiko -y || echo Not rpm distro
 }

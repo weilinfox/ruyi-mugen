@@ -8,7 +8,7 @@ DISTROMAP = [
 
 def mugen_install () {
     
-    sh 'bash dep_install.sh'
+    sh 'sudo bash dep_install.sh'
     
     sh 'mkdir conf'
     sh '''

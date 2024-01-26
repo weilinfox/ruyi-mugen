@@ -1,26 +1,18 @@
 # mugen
 
-[![Build Status](https://jenkins.inuyasha.love/job/ruyi-test/badge/icon)](https://jenkins.inuyasha.love/job/ruyi-test/)
+[![Build Status](https://jenkins.inuyasha.love/job/ruyi-mugen/job/ruyisdk/badge/icon)](https://jenkins.inuyasha.love/job/ruyi-mugen/job/ruyisdk/)
 
-RUYISDK mugen 测试分支
+RuyiSDK mugen 测试分支
 
-+ 完整日志
+测试平台：
 
-   + [ruyi-test-oE2309-x86_64-logs.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-oE2309-x86_64-logs.tar.gz)
-   + [ruyi-test-oE2309-riscv64-logs.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-oE2309-riscv64-logs.tar.gz)
-   + [ruyi-test-fedora38-x86_64-logs.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-fedora38-x86_64-logs.tar.gz)
-   + [ruyi-test-jammy-x86_64-logs.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-jammy-x86_64-logs.tar.gz)
-   + [ruyi-test-revyos-riscv64-logs.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-revyos-riscv64-logs.tar.gz)
++ x86\_64 Fedora 38
++ x86\_64 Ubuntu 22.04 LTS
++ x86\_64 openEuler 23.09
++ riscv64 container RevyOS 20231210
++ riscv64 openEuler 23.09
 
-+ 失败日志
-
-   + [ruyi-test-oE2309-x86_64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-oE2309-x86_64-logs_failed.tar.gz)
-   + [ruyi-test-oE2309-riscv64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-oE2309-riscv64-logs_failed.tar.gz)
-   + [ruyi-test-fedora38-x86_64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-fedora38-x86_64-logs_failed.tar.gz)
-   + [ruyi-test-jammy-x86_64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-jammy-x86_64-logs_failed.tar.gz)
-   + [ruyi-test-revyos-riscv64-logs_failed.tar.gz](https://jenkins.inuyasha.love/job/ruyi-test/lastSuccessfulBuild/artifact/ruyi-test-revyos-riscv64-logs_failed.tar.gz)
-
-测试支持 redhat/debian 系发行版
+## 对上游 mugen 的更改
 
 在测试用例中显示安装软件包示例如下
 

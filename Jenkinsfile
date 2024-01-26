@@ -30,9 +30,9 @@ def mugen_install () {
 }
 
 def mugen_run () {
-    sh 'bash mugen.sh -f ruyi -x || echo Mugen test failed'
+    sh 'sudo bash mugen.sh -f ruyi -x || echo Mugen test failed'
     
-    sh 'dnf install -y tar || apt-get install -y tar'
+    sh 'sudo dnf install -y tar || sudo apt-get install -y tar'
 
     sh 'for f in $(find ./logs -type f); do mv "$f" "$(echo "$f" | sed "s/:/_/g")"; done'
     sh "tar zcvf ruyi-test-logs.tar.gz ./logs"

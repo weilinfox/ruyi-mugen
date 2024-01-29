@@ -2,34 +2,34 @@
     "path": "$OET_PATH/testcases/cli-test/ruyi",
     "cases": [
         {
-            "name": "oe_test_ruyi"
+            "name": "ruyi_test_common"
         },
         {
-            "name": "oe_test_ruyi_xdg"
+            "name": "ruyi_test_xdg"
         },
         {
-            "name": "oe_test_ruyi_venv"
+            "name": "ruyi_test_venv"
         },
         {
-            "name": "oe_test_ruyi_admin"
+            "name": "ruyi_test_admin"
         },
         {
-            "name": "oe_test_ruyi_cmake_ninja"
+            "name": "ruyi_test_cmake_ninja"
         },
         {
-            "name": "oe_test_ruyi_qemu"
+            "name": "ruyi_test_qemu"
         },
         {
-            "name": "oe_test_ruyi_xthead_qemu"
+            "name": "ruyi_test_xthead_qemu"
         },
         {
-            "name": "oe_test_ruyi_llvm"
+            "name": "ruyi_test_llvm"
         },
         {
-            "name": "oe_test_ruyi_news"
+            "name": "ruyi_test_news"
         },
         {
-            "name": "oe_test_ruyi_device"
+            "name": "ruyi_test_device"
         }
     ]
 }

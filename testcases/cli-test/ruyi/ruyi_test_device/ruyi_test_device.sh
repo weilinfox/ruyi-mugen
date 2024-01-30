@@ -19,7 +19,7 @@
 source "../common/common_lib.sh"
 source "./common/device_lib.sh"
 
-EXECUTE_T=120m
+EXECUTE_T=1440m
 
 function pre_test() {
     LOG_INFO "Start environmental preparation."

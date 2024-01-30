@@ -67,8 +67,8 @@ remove_ruyi_data() {
 }
 
 install_ruyi() {
-	DNF_INSTALL "git tar bzip2 xz zstd"
-	APT_INSTALL "git tar bzip2 xz-utils zstd"
+	DNF_INSTALL "git tar bzip2 xz zstd unzip"
+	APT_INSTALL "git tar bzip2 xz-utils zstd unzip"
 
 	version="20240128"
 	arch='amd64'

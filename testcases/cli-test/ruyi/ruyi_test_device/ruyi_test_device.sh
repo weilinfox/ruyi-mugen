@@ -9,11 +9,12 @@
 # See the Mulan PSL v2 for more detaitest -f.
 
 # #############################################
-# @Author    :   KotorinMinami
-# @Contact   :   huangshuo4@gmail.com
-# @Date      :   2023/11/28
-# @License   :   Mulan PSL v2
-# @Desc      :   ruyisdk device smoke test
+# @Author       :   KotorinMinami
+# @Contributor  :   weilinfox
+# @Contact      :   huangshuo4@gmail.com
+# @Date         :   2023/11/28
+# @License      :   Mulan PSL v2
+# @Desc         :   ruyisdk device smoke test
 # #############################################
 
 source "./common/device_lib.sh"
@@ -33,6 +34,8 @@ function run_test() {
     ruyi update
 
     recursion_run ''
+    CHECK_RESULT $? 0 0 "Check recursion run failed"
+
     ls_output=($(ls /tmp/ruyi_device/output*))
     for file in ${ls_output[@]}
     do
@@ -40,13 +43,15 @@ function run_test() {
         CHECK_RESULT $? 0 0 "Check file $file failed"
     done
 
+    rm -rf /tmp/ruyi_device/test
+    tar zcf "${OET_PATH}"/logs/ruyi/ruyi_test_device/ruyi_device.tar.gz /tmp/ruyi_device
+    CHECK_RESULT $? 0 0 "Backup temp log file $file failed"
+
     LOG_INFO "End of the test."
 }
 
 function post_test() {
     LOG_INFO "start environment cleanup."
-    rm -rf /tmp/ruyi_device/test
-    tar zcf "${OET_PATH}"/logs/ruyi/ruyi_test_device/ruyi_device.tar.gz /tmp/ruyi_device
     rm -rf /tmp/ruyi_device
     remove_ruyi
     LOG_INFO "Finish environment cleanup!"

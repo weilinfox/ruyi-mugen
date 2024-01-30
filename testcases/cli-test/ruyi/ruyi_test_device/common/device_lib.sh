@@ -9,12 +9,12 @@
 # See the Mulan PSL v2 for more detaitest -f.
 
 # #############################################
-# @Author    :   KotorinMinami
-# @Author    :   weilinfox
-# @Contact   :   huangshuo4@gmail.com
-# @Date      :   2024/1/29
-# @License   :   Mulan PSL v2
-# @Desc      :   ruyisdk mugen device libs
+# @Author       :   KotorinMinami
+# @Contributor  :   weilinfox
+# @Contact      :   huangshuo4@gmail.com
+# @Date         :   2024/1/29
+# @License      :   Mulan PSL v2
+# @Desc         :   ruyisdk mugen device libs
 # #############################################
 
 source "${OET_PATH}"/libs/locallibs/common_lib.sh
@@ -52,20 +52,24 @@ function recursion_run() {
         return 0;
     fi
 
+    ret=0
     grep "Proceed with flashing" /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
         rm -rf /tmp/ruyi_device/test
         touch /tmp/ruyi_device/test
         recursion_run "$now_exec\nn" 2
+        ret=$(expr $ret + $?)
         recursion_run "$now_exec\ny" 2
-        return 0;
+        ret=$(expr $ret + $?)
+        return $ret;
     fi
     grep "Please give the path for the target's whole disk" /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
         rm -rf /tmp/ruyi_device/test
         touch /tmp/ruyi_device/test
         recursion_run "$now_exec\n/tmp/ruyi_device/test" 1
-        return 0;
+        ret=$(expr $ret + $?)
+        return $ret;
     fi
     grep 'Proceed?' /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
@@ -74,8 +78,9 @@ function recursion_run() {
         for step in ${next_step[@]}; do
             [ $step != 'n' ]
             recursion_run "$now_exec\n$step" $?
+            ret=$(expr $ret + $?)
         done
-        return 0;
+        return $ret;
     fi
     grep 'Choice' /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
@@ -84,8 +89,9 @@ function recursion_run() {
         for step in ${next_step[@]}; do
             [ $step != 'n' ]
             recursion_run "$now_exec\n$step" $?
+            ret=$(expr $ret + $?)
         done
-        return 0;
+        return $ret;
     fi
     grep 'Continue' /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
@@ -94,8 +100,9 @@ function recursion_run() {
         for step in ${next_step[@]}; do
             [ $step != 'n' ]
             recursion_run "$step" $?
+            ret=$(expr $ret + $?)
         done
-        return 0;
+        return $ret;
     fi
     mv /tmp/ruyi_device/output /tmp/ruyi_device/output_${now_exec}
 

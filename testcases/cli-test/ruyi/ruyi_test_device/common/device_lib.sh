@@ -34,48 +34,48 @@ function test_ouput() {
 function recursion_run() {
     local now_exec=$1
     
-    echo -e $now_exec | ruyi device provision | grep -Ev '^$|#' | tail -5 > /tmp/output
+    echo -e $now_exec | ruyi device provision | grep -Ev '^$|#' | tail -5 > /tmp/ruyi_device/output
 
-    grep 'Happy hacking!' /tmp/output
+    grep 'Happy hacking!' /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
-        mv /tmp/output /tmp/output_${now_exec}
+        mv /tmp/ruyi_device/output /tmp/ruyi_device/output_${now_exec}
         return 0;
     fi
-    grep 'Proceed' /tmp/output
+    grep 'Proceed' /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
-        test_ouput /tmp/output 'Proceed'
+        test_ouput /tmp/ruyi_device/output 'Proceed'
         local next_step=(${result_item[@]})
         for step in ${next_step[@]}; do
             recursion_run "$now_exec\n$step"
         done
         return 0;
     fi
-    grep "Please give the path for the target's whole disk" /tmp/output
+    grep "Please give the path for the target's whole disk" /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
-        rm -rf /tmp/test
-        touch /tmp/test
-        recursion_run "$now_exec\n/tmp/test"
+        rm -rf /tmp/ruyi_device/test
+        touch /tmp/ruyi_device/test
+        recursion_run "$now_exec\n/tmp/ruyi_device/test"
         return 0;
     fi
-    grep 'Choice' /tmp/output
+    grep 'Choice' /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
-        test_ouput /tmp/output 'Choice'
+        test_ouput /tmp/ruyi_device/output 'Choice'
         local next_step=(${result_item[@]})
         for step in ${next_step[@]}; do
             recursion_run "$now_exec\n$step"
         done
         return 0;
     fi
-    grep 'Continue' /tmp/output
+    grep 'Continue' /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
-        test_ouput /tmp/output 'Continue'
+        test_ouput /tmp/ruyi_device/output 'Continue'
         local next_step=(${result_item[@]})
         for step in ${next_step[@]}; do
             recursion_run "$now_exec\n$step"
         done
         return 0;
     fi
-    mv /tmp/output /tmp/output_${now_exec}
+    mv /tmp/ruyi_device/output /tmp/ruyi_device/output_${now_exec}
     return 1;           
 
 }

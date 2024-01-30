@@ -22,6 +22,7 @@ source "./common/device_lib.sh"
 function pre_test() {
     LOG_INFO "Start environmental preparation."
     install_ruyi || LOG_ERROR "Install ruyi error"
+    mkdir /tmp/ruyi_device
     LOG_INFO "End of environmental preparation!"
 }
 
@@ -31,7 +32,7 @@ function run_test() {
     ruyi update
 
     recursion_run ''
-    ls_output=($(ls /tmp/output*))
+    ls_output=($(ls /tmp/ruyi_device/output*))
     for file in ${ls_output[@]}
     do
         test_res $file
@@ -43,8 +44,7 @@ function run_test() {
 
 function post_test() {
     LOG_INFO "start environment cleanup."
-    rm -rf /tmp/output*
-    rm -rf /tmp/test
+    rm -rf /tmp/ruyi_device
     remove_ruyi
     LOG_INFO "Finish environment cleanup!"
 }

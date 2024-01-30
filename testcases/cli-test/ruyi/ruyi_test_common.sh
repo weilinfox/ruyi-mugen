@@ -66,6 +66,8 @@ function run_test() {
     else
         http_proxy=http://wrong.proxy https_proxy=http://wrong.proxy ruyi install $pkgname
         CHECK_RESULT $? 0 1 "Check ruyi install package from wrong proxy failed"
+        http_proxy=http://wrong.proxy https_proxy=http://wrong.proxy ruyi install $pkgname | grep "Basic connectivity problems"
+        CHECK_RESULT $? 0 0 "Check ruyi install failure message failed"
         ruyi install $pkgname 2>&1 | grep "downloading"
         CHECK_RESULT $? 0 0 "Check ruyi install package failed"
         ruyi install $pkgname 2>&1 | grep "skipping already installed package"

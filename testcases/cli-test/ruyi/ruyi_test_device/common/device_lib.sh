@@ -18,6 +18,7 @@
 # #############################################
 
 source "${OET_PATH}"/libs/locallibs/common_lib.sh
+source "../../common/common_lib.sh"
 
 result_item=()
 
@@ -47,8 +48,10 @@ function recursion_run() {
     if [[ $? -eq 0 ]]; then
 	tail -20 /tmp/ruyi_device/output > /tmp/ruyi_device/output_${now_exec}
         rm /tmp/ruyi_device/output
+        rm -rf "$(get_ruyi_dir)/distfiles/*"
         return 0;
     fi
+
     grep "Proceed with flashing" /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
         rm -rf /tmp/ruyi_device/test

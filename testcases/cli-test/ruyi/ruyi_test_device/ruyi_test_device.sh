@@ -16,7 +16,6 @@
 # @Desc      :   ruyisdk device smoke test
 # #############################################
 
-source "../common/common_lib.sh"
 source "./common/device_lib.sh"
 
 EXECUTE_T=1440m

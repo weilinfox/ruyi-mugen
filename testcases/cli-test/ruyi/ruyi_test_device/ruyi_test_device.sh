@@ -44,7 +44,7 @@ function run_test() {
     done
 
     rm -rf /tmp/ruyi_device/test
-    tar zcf "${OET_PATH}"/logs/ruyi/ruyi_test_device/ruyi_device.tar.gz /tmp/ruyi_device
+    tar zcf "${OET_PATH}"/logs/ruyi/ruyi_test_device/$(date +'%Y-%m-%d-%H:%M:%S').tar.gz /tmp/ruyi_device
     CHECK_RESULT $? 0 0 "Backup temp log file $file failed"
 
     LOG_INFO "End of the test."

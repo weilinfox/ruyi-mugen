@@ -36,7 +36,12 @@ function test_ouput() {
 function recursion_run() {
     local now_exec=$1
     local end_exec=$2
-    
+
+    if [[ ${#now_exec} -gt 100 ]]; then
+        LOG_ERROR "Quit test due to $now_exec longer then 100"
+        return 1
+    fi
+
     if [[ ! -z "$end_exec" && "$end_exec" != "0" ]]; then
         echo -e $now_exec | ruyi device provision > /tmp/ruyi_device/output
 	echo "Happy hacking! $(expr $end_exec - 1) $?" >> /tmp/ruyi_device/output

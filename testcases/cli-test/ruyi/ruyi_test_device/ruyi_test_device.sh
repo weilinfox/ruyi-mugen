@@ -19,6 +19,8 @@
 source "../common/common_lib.sh"
 source "./common/device_lib.sh"
 
+EXECUTE_T=120m
+
 function pre_test() {
     LOG_INFO "Start environmental preparation."
     install_ruyi || LOG_ERROR "Install ruyi error"
@@ -44,6 +46,8 @@ function run_test() {
 
 function post_test() {
     LOG_INFO "start environment cleanup."
+    rm -rf /tmp/ruyi_device/test
+    tar zcf "${OET_PATH}"/logs/ruyi/ruyi_test_device/ruyi_device.tar.gz /tmp/ruyi_device
     rm -rf /tmp/ruyi_device
     remove_ruyi
     LOG_INFO "Finish environment cleanup!"

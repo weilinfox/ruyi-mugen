@@ -9,14 +9,15 @@
 # See the Mulan PSL v2 for more detaitest -f.
 
 # #############################################
-# @Author    :   weilinfox
-# @Contact   :   caiweilin@iscas.ac.cn
+# @Author    :   KotorinMinami
+# @Contact   :   huangshuo4@gmail.com
 # @Date      :   2023/11/28
 # @License   :   Mulan PSL v2
-# @Desc      :   ruyisdk device test
+# @Desc      :   ruyisdk device smoke test
 # #############################################
 
-source "./common/common_lib.sh"
+source "../common/common_lib.sh"
+source "./common/device_lib.sh"
 
 function pre_test() {
     LOG_INFO "Start environmental preparation."
@@ -28,38 +29,24 @@ function run_test() {
     LOG_INFO "Start to run test."
 
     ruyi update
-    expect >/dev/null <<EOF
-        set timeout 10
-        spawn ./ruyi device provision
-        set i 0
-        while {\$i < 10} {
-            expect {
-                "Continue? \(y/N\)" {
-                    send "y\r"
-                }
-                "Choice? \(1-" {
-                    send "1\r"
-                }
-                "Proceed? \(y/N\)" {
-                    send "n\r"
-                }
-                eof {
-                    catch wait result
-                    exit [lindex \$result 3]
-                }
-            }
-        }
-EOF
-    CHECK_RESULT $? 0 1 "Check ruyi device provision failed"
+
+    recursion_run ''
+    ls_output=($(ls /tmp/output*))
+    for file in ${ls_output[@]}
+    do
+        test_res $file
+        CHECK_RESULT $? 0 0 "Check file $file failed"
+    done
 
     LOG_INFO "End of the test."
 }
 
 function post_test() {
     LOG_INFO "start environment cleanup."
+    rm -rf /tmp/output*
+    rm -rf /tmp/test
     remove_ruyi
     LOG_INFO "Finish environment cleanup!"
 }
 
 main "$@"
-

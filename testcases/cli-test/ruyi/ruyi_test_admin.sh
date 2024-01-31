@@ -27,7 +27,7 @@ function pre_test() {
 function run_test() {
     LOG_INFO "Start to run test."
 
-    test_file=oe_test_ruyi_admin.sh
+    test_file=ruyi_test_admin.sh
     ruyi admin manifest $test_file
     CHECK_RESULT $? 0 0 "Check ruyi admin manifest failed"
 

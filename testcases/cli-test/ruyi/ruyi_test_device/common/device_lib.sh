@@ -23,7 +23,7 @@ source "../common/common_lib.sh"
 result_item=()
 
 function test_ouput() {
-    output=$(grep "$2" $1 | awk '{print $2}')
+    output=$(grep "$2" $1 | awk '{print $2}' | tail -1)
     if [[ "$output" == '(y/N)' ]]; then
         result_item=('y' 'n');
     elif [[ "$output" =~ (1-.) ]]; then
@@ -46,7 +46,7 @@ function recursion_run() {
         echo -e $now_exec | ruyi device provision 2>&1 > /tmp/ruyi_device/output
         echo -e "\nHappy hacking! $(expr $end_exec - 1) $?" >> /tmp/ruyi_device/output
     else
-        echo -e $now_exec | ruyi device provision 2>&1 | grep -Ev '^$|#' | tail -5 > /tmp/ruyi_device/output
+        echo -e $now_exec | ruyi device provision 2>&1 | grep -Ev '^$|#' > /tmp/ruyi_device/output
     fi
 
     grep 'Happy hacking!' /tmp/ruyi_device/output

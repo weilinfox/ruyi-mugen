@@ -29,7 +29,7 @@ function test_ouput() {
     elif [[ "$output" =~ (1-.) ]]; then
         result_item=($(seq ${output:0-2:1}));
     else
-        result_item=('y' 'n');
+        result_item=();
     fi
 }
 
@@ -43,10 +43,10 @@ function recursion_run() {
     fi
 
     if [[ ! -z "$end_exec" && "$end_exec" != "0" ]]; then
-        echo -e $now_exec | ruyi device provision > /tmp/ruyi_device/output
-	echo "Happy hacking! $(expr $end_exec - 1) $?" >> /tmp/ruyi_device/output
+        echo -e $now_exec | ruyi device provision 2>&1 > /tmp/ruyi_device/output
+        echo -e "\nHappy hacking! $(expr $end_exec - 1) $?" >> /tmp/ruyi_device/output
     else
-        echo -e $now_exec | ruyi device provision | grep -Ev '^$|#' | tail -5 > /tmp/ruyi_device/output
+        echo -e $now_exec | ruyi device provision 2>&1 | grep -Ev '^$|#' | tail -5 > /tmp/ruyi_device/output
     fi
 
     grep 'Happy hacking!' /tmp/ruyi_device/output
@@ -56,11 +56,17 @@ function recursion_run() {
         tail -20 /tmp/ruyi_device/output > /tmp/ruyi_device/output_${now_exec_f}
         rm /tmp/ruyi_device/output
         rm -rf "$(get_ruyi_dir)/distfiles/*"
-        rm -rf "$(get_ruyi_data_dir)/blogs/*"
+        rm -rf "$(get_ruyi_data_dir)/blobs/*"
         return 0;
     fi
 
     ret=0
+    grep "failed to fetch distfile" /tmp/ruyi_device/output
+    if [[ $? -eq 0 ]]; then
+        recursion_run "$now_exec"
+        ret=$(expr $ret + $?)
+        return $ret;
+    fi
     grep "Proceed with flashing" /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
         rm -rf /tmp/ruyi_device/test

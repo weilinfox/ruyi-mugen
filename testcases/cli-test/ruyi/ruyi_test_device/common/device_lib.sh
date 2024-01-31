@@ -51,9 +51,12 @@ function recursion_run() {
 
     grep 'Happy hacking!' /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
-	tail -20 /tmp/ruyi_device/output > /tmp/ruyi_device/output_${now_exec}
+        now_exec_f=$(echo -E "$now_exec" | sed 's/\\n//g')
+        now_exec_f=$(echo -E "$now_exec_f" | sed 's$/$_$g')
+        tail -20 /tmp/ruyi_device/output > /tmp/ruyi_device/output_${now_exec_f}
         rm /tmp/ruyi_device/output
         rm -rf "$(get_ruyi_dir)/distfiles/*"
+        rm -rf "$(get_ruyi_data_dir)/blogs/*"
         return 0;
     fi
 

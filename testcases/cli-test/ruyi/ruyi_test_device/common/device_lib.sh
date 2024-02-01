@@ -43,7 +43,9 @@ function recursion_run() {
     fi
 
     if [[ "$end_exec" == "y" ]]; then
-        SLEEP_WAIT 30s "echo -e \"$now_exec\" | ruyi device provision 2>&1 > /tmp/ruyi_device/output"
+        nohup echo -e "$now_exec" | ruyi device provision 2>&1 | tee > /tmp/ruyi_device/output &
+        SLEEP_WAIT 30s
+        kill -9 $!
         happy=n
         grep -A 20 'Saving to' /tmp/ruyi_device/output | grep '\[=' && echo -e "\nHappy hacking! 0 0" >> /tmp/ruyi_device/output && happy=y
         curl_out=$(grep -A 20 'Total' /tmp/ruyi_device/output | grep -A 20 'Received' | tail -15 | awk '{printf $1" "}')

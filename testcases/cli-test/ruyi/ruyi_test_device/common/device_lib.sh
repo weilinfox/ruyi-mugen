@@ -48,12 +48,12 @@ function recursion_run() {
         kill -9 $!
         sed "s/\x0D/\\n/g" /tmp/ruyi_device/output > /tmp/ruyi_device/output_e
         happy=n
-        grep -A 20 'Saving to' /tmp/ruyi_device/output_e | grep '\[=' && echo -e "\nHappy hacking! 0 0" >> /tmp/ruyi_device/output && happy=y
-        [ $happy = n ] && curl_out=$(grep -A 20 'Total' /tmp/ruyi_device/output_e | grep -A 20 'Received' | tail -15 | awk '{printf $4" "}')
+        grep -A 100 'Saving to' /tmp/ruyi_device/output_e | grep '\[=' && echo -e "\nHappy hacking! 0 0" >> /tmp/ruyi_device/output && happy=y
+        [ $happy = n ] && curl_out=$(grep -A 100 'Total' /tmp/ruyi_device/output_e | grep -A 100 'Received' | awk '{printf $4" "}')
         for i in $(echo $curl_out); do
             [[ $i =~ [0-9]+ && $i != '0' ]] && echo -e "\nHappy hacking! 0 0" >> /tmp/ruyi_device/output && happy=y && break
         done
-        [ $happy = n ] && echo -e "\nHappy hacking! 0 1" >> /tmp/ruyi_device/output
+        ( ! grep "failed to fetch distfile" /tmp/ruyi_device/output_e ) && [ $happy = n ] && echo -e "\nHappy hacking! 0 1" >> /tmp/ruyi_device/output
         rm -f /tmp/ruyi_device/output_e
     elif [ ! -z "$end_exec" ] && [ "$end_exec" != "0" ]; then
         echo -e $now_exec | ruyi device provision 2>&1 > /tmp/ruyi_device/output
@@ -68,16 +68,15 @@ function recursion_run() {
         now_exec_f=$(echo -E "$now_exec" | sed 's/\\n//g')
         now_exec_f=$(echo -E "$now_exec_f" | sed 's$/$_$g')
         mv /tmp/ruyi_device/output /tmp/ruyi_device/output_${now_exec_f}
-        rm /tmp/ruyi_device/output
-        rm -rf "$(get_ruyi_dir)/distfiles/*"
-        rm -rf "$(get_ruyi_data_dir)/blobs/*"
+        rm -rf "$(get_ruyi_dir)"/distfiles/*
+        rm -rf "$(get_ruyi_data_dir)"/blobs/*
         return 0;
     fi
 
     ret=0
     grep "failed to fetch distfile" /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
-        recursion_run "$now_exec"
+        recursion_run "$now_exec" "y"
         ret=$(expr $ret + $?)
         return $ret;
     fi
@@ -115,8 +114,9 @@ function recursion_run() {
         test_ouput /tmp/ruyi_device/output 'Choice'
         local next_step=(${result_item[@]})
         for step in ${next_step[@]}; do
-            [ $step != 'n' ]
-            recursion_run "$now_exec\n$step" $?
+            end_exec=
+            [ $step = 'n' ] && end_exec=2
+            recursion_run "$now_exec\n$step" $end_exec
             ret=$(expr $ret + $?)
         done
         return $ret;
@@ -126,8 +126,9 @@ function recursion_run() {
         test_ouput /tmp/ruyi_device/output 'Continue'
         local next_step=(${result_item[@]})
         for step in ${next_step[@]}; do
-            [ $step != 'n' ]
-            recursion_run "$step" $?
+            end_exec=
+            [ $step = 'n' ] && end_exec=2
+            recursion_run "$step" $end_exec
             ret=$(expr $ret + $?)
         done
         return $ret;

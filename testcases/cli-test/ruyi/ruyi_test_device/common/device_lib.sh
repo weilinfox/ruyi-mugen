@@ -44,15 +44,17 @@ function recursion_run() {
 
     if [[ "$end_exec" == "y" ]]; then
         nohup echo -e "$now_exec" | ruyi device provision 2>&1 | tee > /tmp/ruyi_device/output &
-        SLEEP_WAIT 30s
+        SLEEP_WAIT 1m
         kill -9 $!
+        sed "s/\x0D/\\n/g" /tmp/ruyi_device/output > /tmp/ruyi_device/output_e
         happy=n
-        grep -A 20 'Saving to' /tmp/ruyi_device/output | grep '\[=' && echo -e "\nHappy hacking! 0 0" >> /tmp/ruyi_device/output && happy=y
-        curl_out=$(grep -A 20 'Total' /tmp/ruyi_device/output | grep -A 20 'Received' | tail -15 | awk '{printf $1" "}')
+        grep -A 20 'Saving to' /tmp/ruyi_device/output_e | grep '\[=' && echo -e "\nHappy hacking! 0 0" >> /tmp/ruyi_device/output && happy=y
+        [ $happy = n ] && curl_out=$(grep -A 20 'Total' /tmp/ruyi_device/output_e | grep -A 20 'Received' | tail -15 | awk '{printf $4" "}')
         for i in $(echo $curl_out); do
-            [[ $i =~ '[0-9]+' && $i != '0' ]] && echo -e "\nHappy hacking! 0 0" >> /tmp/ruyi_device/output && happy=y && break
+            [[ $i =~ [0-9]+ && $i != '0' ]] && echo -e "\nHappy hacking! 0 0" >> /tmp/ruyi_device/output && happy=y && break
         done
         [ $happy = n ] && echo -e "\nHappy hacking! 0 1" >> /tmp/ruyi_device/output
+        rm -f /tmp/ruyi_device/output_e
     elif [ ! -z "$end_exec" ] && [ "$end_exec" != "0" ]; then
         echo -e $now_exec | ruyi device provision 2>&1 > /tmp/ruyi_device/output
         ret=$?

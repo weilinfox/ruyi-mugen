@@ -42,7 +42,15 @@ function recursion_run() {
         return 1
     fi
 
-    if [[ ! -z "$end_exec" && "$end_exec" != "0" ]]; then
+
+    if [[ "$end_exec" == "y" ]]; then
+        SLEEP_WAIT 30s "echo -e $now_exec | ruyi device provision 2>&1 | grep -Ev '^$|#' > /tmp/ruyi_device/output"
+        grep -A 20 'Saving to' /tmp/ruyi_device/output | grep '\[=' && echo -e "\nHappy hacking! 0 0" >> /tmp/ruyi_device/output
+        curl_out=$(grep -A 20 'Total' /tmp/ruyi_device/output | grep -A 20 'Received' | tail -15 | awk '{printf $1" "}')
+        for i in $(echo $curl_out); do
+            [[ $i =~ '[0-9]+' && $i != '0' ]] && echo -e "\nHappy hacking! 0 0" >> /tmp/ruyi_device/output && break
+        done
+    elif [[ "$end_exec" =~ '[0-9]+' && "$end_exec" != "0" ]]; then
         echo -e $now_exec | ruyi device provision 2>&1 > /tmp/ruyi_device/output
         echo -e "\nHappy hacking! $(expr $end_exec - 1) $?" >> /tmp/ruyi_device/output
     else
@@ -90,8 +98,9 @@ function recursion_run() {
         test_ouput /tmp/ruyi_device/output 'Proceed?'
         local next_step=(${result_item[@]})
         for step in ${next_step[@]}; do
-            [ $step != 'n' ]
-            recursion_run "$now_exec\n$step" $?
+            [ $step != 'n' ] || recursion_run "$now_exec\n$step" $?
+            [ $step == 'y' ] && recursion_run "$now_exec\n$step" $step
+            # [[ $stop =~ [0-9]+ ]] && recursion_run "$now_exec\n$step"
             ret=$(expr $ret + $?)
         done
         return $ret;

@@ -35,7 +35,7 @@ function run_test() {
     ruyi update
 
     recursion_run ''
-    #CHECK_RESULT $? 0 0 "Check recursion run failed"
+    CHECK_RESULT $? 0 0 "Check recursion run failed"
 
     ls_output=($(ls /tmp/ruyi_device/output*))
     for file in ${ls_output[@]}

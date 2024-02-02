@@ -23,6 +23,7 @@ source "../common/common_lib.sh"
 result_item=()
 
 function test_ouput() {
+    local output
     output=$(grep "$2" $1 | awk '{print $2}' | tail -1)
     if [[ "$output" == '(y/N)' ]]; then
         result_item=('y' 'n');
@@ -47,6 +48,7 @@ function recursion_run() {
         SLEEP_WAIT 1m
         kill -9 $!
         sed "s/\x0D/\\n/g" /tmp/ruyi_device/output > /tmp/ruyi_device/output_e
+        local happy
         happy=n
         grep -A 100 'Saving to' /tmp/ruyi_device/output_e | grep '\[=' && echo -e "\nHappy hacking! 0 0" >> /tmp/ruyi_device/output && happy=y
         [ $happy = n ] && curl_out=$(grep -A 100 'Total' /tmp/ruyi_device/output_e | grep -A 100 'Received' | awk '{printf $4" "}')
@@ -56,6 +58,7 @@ function recursion_run() {
         ( ! grep "failed to fetch distfile" /tmp/ruyi_device/output_e ) && [ $happy = n ] && echo -e "\nHappy hacking! 0 1" >> /tmp/ruyi_device/output
         rm -f /tmp/ruyi_device/output_e
     elif [ ! -z "$end_exec" ] && [ "$end_exec" != "0" ]; then
+        local ret
         echo -e $now_exec | ruyi device provision 2>&1 > /tmp/ruyi_device/output
         ret=$?
         echo -e "\nHappy hacking! $(expr $end_exec - 1) $ret" >> /tmp/ruyi_device/output
@@ -65,6 +68,7 @@ function recursion_run() {
 
     grep 'Happy hacking!' /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
+        local now_exec_f
         now_exec_f=$(echo -E "$now_exec" | sed 's/\\n//g')
         now_exec_f=$(echo -E "$now_exec_f" | sed 's$/$_$g')
         mv /tmp/ruyi_device/output /tmp/ruyi_device/output_${now_exec_f}
@@ -73,6 +77,7 @@ function recursion_run() {
         return 0;
     fi
 
+    local ret
     ret=0
     grep "failed to fetch distfile" /tmp/ruyi_device/output
     if [[ $? -eq 0 ]]; then
@@ -139,14 +144,15 @@ function recursion_run() {
 }
 
 function test_res() {
-    file=$1
-    res=0
+    local file=$1
+    local res=0
+    local ret=0
 
     ret=$(grep 'Happy hacking!' $file)
     res=$(expr $res + $?)
 
-    ret_e=$(echo $ret | awk '{print $3}')
-    ret_g=$(echo $ret | awk '{print $4}')
+    local ret_e=$(echo $ret | awk '{print $3}')
+    local ret_g=$(echo $ret | awk '{print $4}')
 
     ( [ $ret_e = 0 ] && [ $ret_g = 0 ] ) || ( [ $ret_e != 0 ] && [ $ret_g != 0 ] )
     res=$(expr $res + $?)

@@ -27,7 +27,7 @@ source ${OET_PATH}/libs/locallibs/common_lib.sh
 
 [[ -d "/etc/mugen" ]] && export conf_file="/etc/mugen/mugen.json" || export conf_file="${OET_PATH}/conf/mugen.json"
 
-TIMEOUT="30m"
+TIMEOUT="60m"
 COMMAND_X="no"
 COMMAND_S="no"
 COPY_DONE="no"

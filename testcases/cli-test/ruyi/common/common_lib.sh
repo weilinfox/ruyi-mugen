@@ -66,16 +66,31 @@ remove_ruyi_data() {
 	rm -rf $(get_ruyi_dir) $(get_ruyi_data_dir) $(get_ruyi_state_dir)
 }
 
-install_ruyi() {
-	DNF_INSTALL "git tar bzip2 xz zstd unzip"
-	APT_INSTALL "git tar bzip2 xz-utils zstd unzip"
-
+install_release_ruyi() {
 	version="0.4.0"
 	arch='amd64'
 	larch="$(uname -m)"
 	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi
 	if [ "$larch"  == "aarch64" ]; then arch='arm64'; fi
 	curl -L -o ruyi https://mirror.iscas.ac.cn/ruyisdk/ruyi/releases/${version}/ruyi.${arch}
+}
+
+install_github_release_ruyi() {
+	version="0.5.0-beta.20240224"
+	arch='amd64'
+	larch="$(uname -m)"
+	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi
+	if [ "$larch"  == "aarch64" ]; then arch='arm64'; fi
+	curl -L -o ruyi https://github.com/ruyisdk/ruyi/releases/download/${version}/ruyi-${version}.${arch}
+}
+
+install_ruyi() {
+	DNF_INSTALL "git tar bzip2 xz zstd unzip"
+	APT_INSTALL "git tar bzip2 xz-utils zstd unzip"
+
+	#install_release_ruyi
+	install_github_release_ruyi
+
 	chmod +x ruyi
 	ln -s $(realpath ruyi) /usr/bin/ruyi
 	# remove_ruyi_data

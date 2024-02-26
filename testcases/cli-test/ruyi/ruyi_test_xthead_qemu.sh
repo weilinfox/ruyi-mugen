@@ -60,6 +60,10 @@ EOF
     CHECK_RESULT $? 0 0 "Check ruyi compilation failed"
     ruyi-qemu ./hello_ruyi.o | grep "hello, ruyi"
     CHECK_RESULT $? 0 0 "Check ruyi emulation failed"
+    if [ -f /etc/revyos-release ]; then
+        ./hello_ruyi.o | grep "hello, ruyi"
+        CHECK_RESULT $? 0 0 "Check xthead bin run on revyos failed"
+    fi
 
     ruyi-deactivate
     cd ..

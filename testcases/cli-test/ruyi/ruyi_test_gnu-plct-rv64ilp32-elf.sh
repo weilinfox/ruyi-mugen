@@ -41,7 +41,7 @@ function run_test() {
 
     ruyi venv -t gnu-plct-rv64ilp32-elf --without-sysroot baremetal-rv64ilp32 /tmp/mugen_test_venv
     CHECK_RESULT $? 0 0 "Check ruyi venv creation failed"
-    cat > test.c <EOF
+    cat > test.c << EOF
 long long add(long long *a, long long b) { return *a + b; }                                                                                                                                                                             
 void check(int);                                                                                                                                                                                                                        
 void checkSizes(void) { check(sizeof(int)); check(sizeof(long)); check(sizeof(long long)); check(sizeof(void *)); }

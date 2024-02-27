@@ -154,7 +154,7 @@ function exec_case() {
     exec 2>&7 7>&-
 
     test "$ret_code"x == "143"x && {
-        cmd_pid=$(pgrep "$cmd")
+        cmd_pid=$(pgrep --full "$cmd")
         if [ -n "$cmd_pid" ]; then
             for pid in ${cmd_pid}; do
                 pstree -p "$pid" | grep -o '([0-9]*)' | tr -d '()' | xargs kill -9

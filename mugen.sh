@@ -142,10 +142,12 @@ function exec_case() {
     local log_path=$2
     local case_name=$3
     local test_suite=$4
+    local log_file="$(date +%Y-%m-%d-%T)".log
+    local log_info=
 
     exec 6>&1
     exec 7>&2
-    exec >>"$log_path"/"$(date +%Y-%m-%d-%T)".log 2>&1
+    exec >>"$log_path"/"$log_file" 2>&1
 
     SLEEP_WAIT $TIMEOUT "$cmd"
     ret_code=$?
@@ -154,12 +156,30 @@ function exec_case() {
     exec 2>&7 7>&-
 
     test "$ret_code"x == "143"x && {
-        cmd_pid=$(pgrep --full "$cmd")
-        if [ -n "$cmd_pid" ]; then
-            for pid in ${cmd_pid}; do
-                pstree -p "$pid" | grep -o '([0-9]*)' | tr -d '()' | xargs kill -9
-            done
-        fi
+        local log_ninfo=
+        local delay_cnt=0
+        while true; do
+            log_ninfo=$(ls -la "$log_path"/"$log_file")
+            if [[ "$log_info"x != "$log_ninfo"x ]]; then
+                if [ "$delay_cnt" -ge "50" ]; then
+                    LOG_WARN "The case is still running, but we cannot wait forever."
+                else
+                    LOG_WARN "The case is still running, wait for another 5m."
+                    log_info="$log_ninfo"
+                    ((delay_cnt++))
+                    sleep 5m
+                    continue
+                fi
+            fi
+
+            cmd_pid=$(pgrep --full "$cmd")
+            if [ -n "$cmd_pid" ]; then
+                for pid in ${cmd_pid}; do
+                    pstree -p "$pid" | grep -o '([0-9]*)' | tr -d '()' | xargs kill -9
+                done
+            fi
+            break
+        done
         LOG_WARN "The case execution timeout."
     }
 

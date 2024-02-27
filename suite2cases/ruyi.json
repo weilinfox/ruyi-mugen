@@ -30,6 +30,9 @@
         },
         {
             "name": "ruyi_test_device"
+        },
+        {
+            "name": "ruyi_test_gnu-plct-rv64ilp32-elf"
         }
     ]
 }

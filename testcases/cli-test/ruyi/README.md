@@ -12,6 +12,7 @@
 |  | ruyi\_test\_llvm | LLVM 支持测试 |
 |  | ruyi\_test\_news | ``news`` 命令测试 |
 |  | ruyi\_test\_device | ``device`` 命令测试 |
+|  | ruyi\_test\_gnu-plct-rv64ilp32-elf | ``gnu-plct-rv64ilp32-elf`` 工具链测试 |
 
 ## ruyi\_test\_common 基本命令测试
 
@@ -54,4 +55,8 @@ RUYI ``news`` 命令测试。
 ## ruyi\_test\_device device 命令测试
 
 RUYI ``device`` 命令测试，遍历所有镜像测试。
+
+## ruyi\_test\_gnu-plct-rv64ilp32-elf gnu-plct-rv64ilp32-elf 工具链测试
+
+RUYI gnu-plct-rv64ilp32-elf 工具链测试，验证工具链生成 32 位二进制，但是具有 64 位能力。
 

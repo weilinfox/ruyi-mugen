@@ -67,7 +67,7 @@ remove_ruyi_data() {
 }
 
 install_release_ruyi() {
-	version="0.4.0"
+	version="0.5.0"
 	arch='amd64'
 	larch="$(uname -m)"
 	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi
@@ -88,8 +88,8 @@ install_ruyi() {
 	DNF_INSTALL "git tar bzip2 xz zstd unzip"
 	APT_INSTALL "git tar bzip2 xz-utils zstd unzip"
 
-	#install_release_ruyi
-	install_github_release_ruyi
+	install_release_ruyi
+	#install_github_release_ruyi
 
 	chmod +x ruyi
 	ln -s $(realpath ruyi) /usr/bin/ruyi

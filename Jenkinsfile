@@ -32,6 +32,7 @@ def mugen_install () {
 def mugen_run () {
     sh 'sudo bash mugen.sh -f ruyi -x || echo Mugen test failed'
     sh 'sudo chown -R $USER:$USER ./logs'
+    sh '[ -e ./results ] && sudo chown -R $USER:$USER ./results'
     sh 'sudo dnf install -y tar || sudo apt-get install -y tar'
 
     sh 'for f in $(find ./logs -type f); do mv "$f" "$(echo "$f" | sed "s/:/_/g")"; done'

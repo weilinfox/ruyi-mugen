@@ -32,15 +32,23 @@ function run_test() {
 
     ruyi update
 
-    pe=$(ruyi list | awk '/\* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /\* emulator\/qemu-user-riscv-xthead/ {if (f==0) f=1}' | grep -e "^  -" | grep -v "no binary for current host")
+    local pe=$(ruyi list | awk '/\* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /\* toolchain\/gnu-plct-xthead/ {if (f==0) f=1}' | grep -e "^  -" | grep -v "no binary for current host")
     if [ -z $pe ]; then
-        LOG_INFO "No qemu-user-riscv-xthead available for current host $(uname -m), skip"
+        LOG_INFO "No gnu-plct-xthead available for current host $(uname -m), skip"
         exit 0
     fi
 
-    ruyi install gnu-plct-xthead qemu-user-riscv-xthead
+    local qemu_pkg=
+    local qemu_cmd=
+    pe=$(ruyi list | awk '/\* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /\* emulator\/qemu-user-riscv-xthead/ {if (f==0) f=1}' | grep -e "^  -" | grep -v "no binary for current host")
+    if [ -n "$pe" ]; then
+        qemu_pkg=qemu-user-riscv-xthead
+        qemu_cmd="-e qemu-user-riscv-xthead"
+    fi
+
+    ruyi install gnu-plct-xthead $qemu_pkg
     CHECK_RESULT $? 0 0 "Check ruyi xthead toolchain install failed"
-    ruyi venv -t gnu-plct-xthead -e qemu-user-riscv-xthead sipeed-lpi4a venv
+    ruyi venv -t gnu-plct-xthead $qemu_cmd sipeed-lpi4a venv
     CHECK_RESULT $? 0 0 "Check ruyi xthead venv creation failed"
 
     . venv/bin/ruyi-activate
@@ -58,8 +66,10 @@ EOF
 
     riscv64-plctxthead-linux-gnu-gcc hello_ruyi.c -o hello_ruyi.o
     CHECK_RESULT $? 0 0 "Check ruyi compilation failed"
-    ruyi-qemu ./hello_ruyi.o | grep "hello, ruyi"
-    CHECK_RESULT $? 0 0 "Check ruyi emulation failed"
+    if [ -n "$qemu_pkg" ]; then
+        ruyi-qemu ./hello_ruyi.o | grep "hello, ruyi"
+        CHECK_RESULT $? 0 0 "Check ruyi emulation failed"
+    fi
     if [ -f /etc/revyos-release ]; then
         ./hello_ruyi.o | grep "hello, ruyi"
         CHECK_RESULT $? 0 0 "Check xthead bin run on revyos failed"

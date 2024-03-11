@@ -50,7 +50,7 @@ EOF
     wr=wrong_magic
     cat >"$cfg_f" <<EOF
 [repo]
-remote = "$wr"
+remote = "https://$wr"
 EOF
     ruyi update 2>&1 | grep "$wr"
     CHECK_RESULT $? 0 0 "Check ruyi remote failed"

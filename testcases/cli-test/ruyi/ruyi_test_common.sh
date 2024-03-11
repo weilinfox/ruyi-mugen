@@ -28,7 +28,11 @@ function run_test() {
     LOG_INFO "Start to run test."
 
     ruyi --version | grep "$version"
-    CHECK_RESULT $? 0 0 "Check ruyi version failed"
+    local rv=$?
+    CHECK_RESULT $rv 0 0 "Check ruyi version failed"
+    if [[ "$rv"x != "0x" ]]; then
+         RUYI_DEBUG=x ruyi --version
+    fi
     ruyi 2>&1 |grep usage
     CHECK_RESULT $? 0 0 "Check ruyi empty cmdline help failed"
     ruyi -h | grep usage

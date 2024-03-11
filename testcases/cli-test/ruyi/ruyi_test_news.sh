@@ -28,11 +28,11 @@ function run_test() {
     LOG_INFO "Start to run test."
 
     ruyi update
-    ruyi news read | grep "━━━━━━━━━━━━━━━━━━━━"
+    ruyi news read | grep "#"
     CHECK_RESULT $? 0 0 "Check ruyi news read failed"
     ruyi news read | grep "No news to display."
     CHECK_RESULT $? 0 0 "Check ruyi news read empty failed"
-    ruyi news read 1 | grep "━━━━━━━━━━━━━━━━━━━━"
+    ruyi news read 1 | grep "#"
     CHECK_RESULT $? 0 0 "Check ruyi news read 1 failed"
     ruyi news list | grep "News items"
     CHECK_RESULT $? 0 0 "Check ruyi news list failed"

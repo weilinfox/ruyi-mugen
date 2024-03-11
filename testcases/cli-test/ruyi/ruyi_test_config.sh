@@ -32,7 +32,7 @@ function run_test() {
     cc_dir=`get_ruyi_dir`/packages-index
     cc_td=/tmp/ruyi_config_test
 
-    [ ! -d "$cfg_d" ] && mkdir $cfg_d
+    [ ! -d "$cfg_d" ] && mkdir -p $cfg_d
     [ -d "$cc_td" ] && rm -rf "$cc_td"
 
     cat >"$cfg_f" <<EOF

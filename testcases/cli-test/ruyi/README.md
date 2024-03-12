@@ -60,3 +60,11 @@ RUYI ``device`` 命令测试，遍历所有镜像测试。
 
 RUYI gnu-plct-rv64ilp32-elf 工具链测试，验证工具链生成 32 位二进制，但是具有 64 位能力。
 
+## ruyi\_test\_config config.toml 配置文件测试
+
+RUYI config.toml 配置文件测试
+
+## ruyi\_test\_binaries 工具链/虚拟机二进制测试
+
+RUYI 工具链和虚拟机等二进制包测试
+

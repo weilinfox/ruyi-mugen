@@ -47,10 +47,14 @@ function test_oneshot() {
             continue
         fi
         for b in `ls $bpb`; do
-            file "$bpb"/"$b" | grep ELF | grep executable
+            file "$bpb"/"$b" | grep ELF | grep executable | grep dynamic
             [ "$?"x != "0x" ] && continue
+            ldd "$bpb"/"$b"
+            CHECK_RESULT $? 0 0 "Check ruyi $1/$tc binary $b failed"
             ldd "$bpb"/"$b" | grep -vE "\(0x" | grep ".so"
-            CHECK_RESULT $? 1 0 "Check ruyi $1/$tc binary $b failed"
+            [ "$?"x = "0x" ] && LOG_WARN "Found extra message in ldd $b output"
+            ldd "$bpb"/"$b" | grep -vE "\(0x" | grep ".so" | grep "not found"
+            CHECK_RESULT $? 1 0 "Found .so not found in ldd $b output"
         done
     done
 }

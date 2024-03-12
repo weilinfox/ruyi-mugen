@@ -36,6 +36,9 @@
         },
         {
             "name": "ruyi_test_config"
+        },
+        {
+            "name": "ruyi_test_binaries"
         }
     ]
 }

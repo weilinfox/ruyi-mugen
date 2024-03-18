@@ -69,7 +69,7 @@ pipeline {
                 axes {
                     axis {
                         name "DIRSTO"
-                        values "oE2309-x86_64", "ubuntu2204-x86_64", "fedora38-x86_64", "revyos-riscv64", 'oE2309-riscv64'
+                        values "oE2309-x86_64", "ubuntu2204-x86_64", "fedora38-x86_64", "revyos-riscv64", 'oE2309-riscv64', 'debian12-x86_64', 'debiansid-riscv64'
                     }
                 }
                 

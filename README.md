@@ -23,6 +23,7 @@ RuyiSDK mugen 测试分支
 ```bash
 DNF_INSTALL git
 APT_INSTALL git
+PACMAN_INSTALL git
 ```
 
 由于软件包名称可能不同，两个函数都需要调用
@@ -35,7 +36,7 @@ PKG_REMOVE
 
 不需要任何参数
 
-注意，这样的设计假定了你的发行版中没有同时存在 ``dnf`` 和 ``apt-get``
+注意，这样的设计假定了你的发行版中 ``dnf``、 ``apt-get``、 ``pacman`` 三种包管理只存在一种
 
 ## mugen介绍
 mugen是openEuler社区开放的测试框架，提供公共配置和方法以便社区开发者进行测试代码的编写和执行

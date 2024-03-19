@@ -30,6 +30,12 @@ common_dep(){
     pacman --noconfirm -Syuu && pacman --need --noconfirm -S expect psmisc make iputils python-six python-paramiko || echo Not archlinux distro
 }
 
+jenkins_dep() {
+    apt-get install -y tar || echo Not apt distro
+    dnf install -y tar || echo Not rpm distro
+    pacman --need --noconfirm -S tar || echo Not archlinux distro
+}
+
 qemu_dep(){
     echo "install qemu"
     yum install bridge-utils -y
@@ -46,6 +52,7 @@ qemu_dep(){
 
 run_name=$0
 in_qemu=0
+in_jenkins=0
 run_shell=""
 
 check_option(){
@@ -56,6 +63,8 @@ check_option(){
             return 0
         elif [[ $opt == "-e" ]]; then
             in_qemu=1
+        elif [[ $opt == "-j" ]]; then
+            in_jenkins=1
         elif [[ $opt == "-g" ]]; then
             had_g=1
             check_name=${run_name##*/}
@@ -92,6 +101,13 @@ main(){
 
     if [ $in_qemu -eq 1 ]; then
         qemu_dep
+        if [ $? -ne 0 ]; then
+            return 1
+        fi
+    fi
+
+    if [ $in_jenkins -ne 0 ]; then
+        jenkins_dep
         if [ $? -ne 0 ]; then
             return 1
         fi

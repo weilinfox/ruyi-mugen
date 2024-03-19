@@ -91,8 +91,8 @@ install_github_release_ruyi() {
 }
 
 install_ruyi() {
-	DNF_INSTALL "git tar bzip2 xz zstd unzip"
-	APT_INSTALL "git tar bzip2 xz-utils zstd unzip"
+	DNF_INSTALL "curl git tar bzip2 xz zstd unzip"
+	APT_INSTALL "curl git tar bzip2 xz-utils zstd unzip"
 
 	install_release_ruyi
 	#install_github_release_ruyi

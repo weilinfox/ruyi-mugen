@@ -109,7 +109,7 @@ def archpkg_install(pkgs, node=1, tmpfile=""):
     exitcode, depList = func(conn=conn, cmd='grep -FA 1000 "' + depList.split("\n")[0] +
                                             '" /var/log/pacman.log | ' + 
                                             'grep -F "[ALPM] installed" |' +
-                                            'cut -d' ' -f4')
+                                            'cut -d" " -f4')
 
     if tmpfile == "":
         tmpfile = tempfile.mkstemp(dir="/tmp")[1]
@@ -164,7 +164,7 @@ def archpkg_remove(pkgs="", node=1, tmpfile=""):
         with open(tmpfile, "r") as f:
             depList = f.read()
 
-    exitcode = func(conn=conn, cmd="pacman -noconfirm -R " + pkgs + " " + depList)[0]
+    exitcode = func(conn=conn, cmd="pacman --noconfirm -R " + pkgs + " " + depList)[0]
     if localtion != "local":
         ssh_cmd.pssh_close(conn)
     return exitcode

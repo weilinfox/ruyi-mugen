@@ -25,6 +25,7 @@ function pre_test() {
     install_ruyi || LOG_ERROR "Install ruyi error"
     DNF_INSTALL "cmake ninja-build"
     APT_INSTALL "cmake ninja-build"
+    PACMAN_INSTALL "cmake ninja"
     LOG_INFO "End of environmental preparation!"
 }
 

@@ -82,7 +82,7 @@ install_release_ruyi() {
 }
 
 install_github_release_ruyi() {
-	version="0.6.0-beta.20240307"
+	version="0.7.0-alpha.20240315"
 	arch='amd64'
 	larch="$(uname -m)"
 	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi
@@ -95,8 +95,8 @@ install_ruyi() {
 	APT_INSTALL "curl git tar bzip2 xz-utils zstd unzip"
 	PACMAN_INSTALL "curl git tar bzip2 xz zstd unzip"
 
-	install_release_ruyi
-	#install_github_release_ruyi
+	#install_release_ruyi
+	install_github_release_ruyi
 
 	chmod +x ruyi
 	ln -s $(realpath ruyi) /usr/bin/ruyi

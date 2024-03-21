@@ -12,9 +12,11 @@ RuyiSDK mugen 测试分支
 + x86\_64 openEuler 23.09
 + x86\_64 Archlinux
 + riscv64 Debian sid
-+ riscv64 container RevyOS 20231210
++ riscv64 Fedora 38
++ riscv64 Ubuntu 22.04 LTS
++ riscv64 RevyOS 20231210
 + riscv64 openEuler 23.09
-+ riscv64 container Archlinux
++ riscv64 Archlinux
 
 ## 对上游 mugen 的更改
 

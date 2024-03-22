@@ -17,6 +17,7 @@ RuyiSDK mugen 测试分支
 + riscv64 RevyOS 20231210
 + riscv64 openEuler 23.09
 + riscv64 Archlinux
++ aarch64 Debian 12
 
 ## 对上游 mugen 的更改
 

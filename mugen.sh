@@ -161,13 +161,13 @@ function exec_case() {
         while true; do
             log_ninfo=$(ls -la "$log_path"/"$log_file")
             if [[ "$log_info"x != "$log_ninfo"x ]]; then
-                if [ "$delay_cnt" -ge "50" ]; then
+                if [ "$delay_cnt" -ge "20" ]; then
                     LOG_WARN "The case is still running, but we cannot wait forever."
                 else
-                    LOG_WARN "The case is still running, wait for another 5m."
+                    LOG_WARN "The case is still running, wait for another 15m."
                     log_info="$log_ninfo"
                     ((delay_cnt++))
-                    sleep 5m
+                    sleep 15m
                     continue
                 fi
             fi

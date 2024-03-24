@@ -42,8 +42,19 @@ get_ruyi_config_dir() {
 	echo "$ruyibase"/ruyi
 }
 
+ruyi_curl() {
+	local trys=0
+	while true; do
+		[ $trys -ge 20 ] && break
+		[ -f $1 ] && rm -f $1
+		curl -L -o $1 $2
+		[ $? = 0 ] && break
+		((trys++))
+	done
+}
+
 install_src_ruyi() {
-	curl -L -o ruyi.tar.gz https://github.com/ruyisdk/ruyi/archive/refs/heads/main.tar.gz
+	ruyi_curl ruyi.tar.gz https://github.com/ruyisdk/ruyi/archive/refs/heads/main.tar.gz
 	tar -zxvf ruyi.tar.gz
 	pushd ruyi-main
 	python -m venv --copies venv-ruyi
@@ -78,7 +89,7 @@ install_release_ruyi() {
 	larch="$(uname -m)"
 	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi
 	if [ "$larch"  == "aarch64" ]; then arch='arm64'; fi
-	curl -L -o ruyi https://mirror.iscas.ac.cn/ruyisdk/ruyi/releases/${version}/ruyi.${arch}
+	ruyi_curl ruyi https://mirror.iscas.ac.cn/ruyisdk/ruyi/releases/${version}/ruyi.${arch}
 }
 
 install_github_release_ruyi() {
@@ -87,7 +98,7 @@ install_github_release_ruyi() {
 	larch="$(uname -m)"
 	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi
 	if [ "$larch"  == "aarch64" ]; then arch='arm64'; fi
-	curl -L -o ruyi https://github.com/ruyisdk/ruyi/releases/download/${version}/ruyi-${version}.${arch}
+	ruyi_curl ruyi https://github.com/ruyisdk/ruyi/releases/download/${version}/ruyi-${version}.${arch}
 }
 
 install_ruyi() {

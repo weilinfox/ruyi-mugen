@@ -37,7 +37,8 @@ def mugen_install () {
 }
 
 def mugen_run () {
-    sh 'sudo bash mugen.sh -f ruyi -x | tee ruyi_test.log'
+    sh 'sudo bash mugen.sh -f ruyi -x | tee report_gen_tmpl/26test_log.md'
+    sh "bash report_gen.sh ${DIRSTO}"
     sh 'sudo chown -R $USER:$USER ./* ./.*'
     sh 'sudo bash dep_install.sh -j'
 
@@ -83,15 +84,17 @@ pipeline {
                             echo "Start mugen test on ${DIRSTO}"
                             mugen_install()
                             mugen_run()
-                            sh "mv ruyi-test-logs.tar.gz ruyi-test-${DIRSTO}-logs.tar.gz"
-                            sh "mv ruyi-test-logs_failed.tar.gz ruyi-test-${DIRSTO}-logs_failed.tar.gz"
+                            sh "mkdir test-artifacts"
+                            sh "mv ruyi-test-logs.tar.gz test-artifacts/ruyi-test-${DIRSTO}-logs.tar.gz"
+                            sh "mv ruyi-test-logs_failed.tar.gz test-artifacts/ruyi-test-${DIRSTO}-logs_failed.tar.gz"
+                            sh "mv ruyi_report/*.md test-artifacts"
                         }
                     }
                 }
                 
                 post {
                     always {
-                        archiveArtifacts artifacts: "ruyi-test-*.tar.gz"
+                        archiveArtifacts artifacts: "test-artifacts/*.*"
                         cleanWs()
                     }
                 }

@@ -62,8 +62,8 @@ ruyi_conclusion="此处添加测试结论"
 [ "$ruyi_failed"x = "0x" ] && ruyi_conclusion="没有发现问题"
 
 [[ -d $temp_dir ]] && rm -rf $temp_dir
-[[ -d $ruyi_report ]] && rm -rf $ruyi_report
-mkdir $temp_dir $ruyi_report
+[[ -d $report_dir ]] && rm -rf $report_dir
+mkdir $temp_dir $report_dir
 
 export_ruyi_link
 
@@ -74,14 +74,14 @@ cat `ls ${temp_dir} | sort` > $report_dir/my
 
 rm -rf $temp_dir
 
-sed -i "s/{{ruyi_arch}}/$arch" $report_dir/my
-sed -i "s/{{ruyi_version}}/$version" $report_dir/my
-sed -i "s/{{ruyi_link}}/$ruyi_link" $report_dir/my
-sed -i "s/{{ruyi_testsuites}}/$ruyi_testsuites" $report_dir/my
-sed -i "s/{{ruyi_conclusion}}/$ruyi_conclusion" $report_dir/my
-sed -i "s/{{ruyi_success}}/$ruyi_success" $report_dir/my
-sed -i "s/{{ruyi_failed}}/$ruyi_failed" $report_dir/my
-sed -i "s/{{ruyi_timeout}}/$ruyi_timeout" $report_dir/my
+sed -i "s/{{ruyi_arch}}/$arch/" $report_dir/my
+sed -i "s/{{ruyi_version}}/$version/" $report_dir/my
+sed -i "s/{{ruyi_link}}/$ruyi_link/" $report_dir/my
+sed -i "s/{{ruyi_testsuites}}/$ruyi_testsuites/" $report_dir/my
+sed -i "s/{{ruyi_conclusion}}/$ruyi_conclusion/" $report_dir/my
+sed -i "s/{{ruyi_success}}/$ruyi_success/" $report_dir/my
+sed -i "s/{{ruyi_failed}}/$ruyi_failed/" $report_dir/my
+sed -i "s/{{ruyi_timeout}}/$ruyi_timeout/" $report_dir/my
 
 mv -v $report_dir/my $report_dir/$report_name.md
 

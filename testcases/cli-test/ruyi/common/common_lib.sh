@@ -93,7 +93,7 @@ install_release_ruyi() {
 }
 
 install_github_release_ruyi() {
-	version="0.7.0-beta.20240323"
+	version="0.8.0-alpha.20240325"
 	arch='amd64'
 	larch="$(uname -m)"
 	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi

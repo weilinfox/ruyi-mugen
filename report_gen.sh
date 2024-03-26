@@ -54,6 +54,7 @@ report_name=`echo $report_name_js | jq -r .\"$1\"`
 }
 
 ruyi_testsuites=1
+ruyi_testcases=`grep "use cases were executed, with" $tmpl_dir/26test_log.md | sed "s/^.* A total of \([0-9]*\) use cases were executed, .*$/\\1/"`
 ruyi_success=`grep "use cases were executed, with" $tmpl_dir/26test_log.md | sed "s/^.* with \([0-9]*\) successes and .*$/\\1/"`
 ruyi_failed=`grep "use cases were executed, with" $tmpl_dir/26test_log.md | sed "s/^.* successes and \([0-9]*\) failures\.$/\\1/"`
 ruyi_timeout=`grep "The case exit by code 143" $tmpl_dir/26test_log.md | wc -l`
@@ -71,19 +72,22 @@ cp ${tmpl_dir}/*.md ${tmpl_dir}/$1/*.md $temp_dir/
 
 
 for f in `ls ${temp_dir} | sort`; do
+	echo Find template ${temp_dir}/$f
 	cat ${temp_dir}/$f >> $report_dir/my
 done
 
 rm -rf $temp_dir
 
-sed -i "s/{{ruyi_arch}}/$arch/" $report_dir/my
-sed -i "s/{{ruyi_version}}/$version/" $report_dir/my
-sed -i "s/{{ruyi_link}}/$ruyi_link/" $report_dir/my
-sed -i "s/{{ruyi_testsuites}}/$ruyi_testsuites/" $report_dir/my
-sed -i "s/{{ruyi_conclusion}}/$ruyi_conclusion/" $report_dir/my
-sed -i "s/{{ruyi_success}}/$ruyi_success/" $report_dir/my
-sed -i "s/{{ruyi_failed}}/$ruyi_failed/" $report_dir/my
-sed -i "s/{{ruyi_timeout}}/$ruyi_timeout/" $report_dir/my
+sed -i "s/{{ruyi_arch}}/$arch/g" $report_dir/my
+sed -i "s/{{ruyi_version}}/$version/g" $report_dir/my
+sed -i "s|{{ruyi_link}}|$ruyi_link|g" $report_dir/my
+sed -i "s|{{ruyitest_repo}}|$ruyitest_repo|g" $report_dir/my
+sed -i "s/{{ruyi_testsuites}}/$ruyi_testsuites/g" $report_dir/my
+sed -i "s/{{ruyi_testcases}}/$ruyi_testcases/g" $report_dir/my
+sed -i "s/{{ruyi_conclusion}}/$ruyi_conclusion/g" $report_dir/my
+sed -i "s/{{ruyi_success}}/$ruyi_success/g" $report_dir/my
+sed -i "s/{{ruyi_failed}}/$ruyi_failed/g" $report_dir/my
+sed -i "s/{{ruyi_timeout}}/$ruyi_timeout/g" $report_dir/my
 
 mv -v $report_dir/my $report_dir/$report_name.md
 

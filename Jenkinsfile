@@ -37,7 +37,7 @@ def mugen_install () {
 }
 
 def mugen_run () {
-    sh 'sudo bash mugen.sh -f ruyi -x || echo Mugen test failed'
+    sh 'sudo bash mugen.sh -f ruyi -x | tee ruyi_test.log'
     sh 'sudo chown -R $USER:$USER ./* ./.*'
     sh 'sudo bash dep_install.sh -j'
 

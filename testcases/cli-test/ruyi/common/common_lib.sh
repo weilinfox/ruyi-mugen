@@ -83,22 +83,27 @@ remove_ruyi_data() {
 	rm -rf $(get_ruyi_dir) $(get_ruyi_data_dir) $(get_ruyi_state_dir) $(get_ruyi_config_dir)
 }
 
-install_release_ruyi() {
+export_release_ruyi_link() {
 	version="0.6.0"
 	arch='amd64'
-	larch="$(uname -m)"
+	local larch="$(uname -m)"
 	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi
 	if [ "$larch"  == "aarch64" ]; then arch='arm64'; fi
-	ruyi_curl ruyi https://mirror.iscas.ac.cn/ruyisdk/ruyi/releases/${version}/ruyi.${arch}
+	ruyi_link=https://mirror.iscas.ac.cn/ruyisdk/ruyi/releases/${version}/ruyi.${arch}
 }
 
-install_github_release_ruyi() {
+export_github_release_ruyi_link() {
 	version="0.8.0-alpha.20240325"
 	arch='amd64'
-	larch="$(uname -m)"
+	local larch="$(uname -m)"
 	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi
 	if [ "$larch"  == "aarch64" ]; then arch='arm64'; fi
-	ruyi_curl ruyi https://github.com/ruyisdk/ruyi/releases/download/${version}/ruyi-${version}.${arch}
+	ruyi_link=https://github.com/ruyisdk/ruyi/releases/download/${version}/ruyi-${version}.${arch}
+}
+
+export_ruyi_link() {
+	#export_release_ruyi_link
+	export_github_release_ruyi_link
 }
 
 install_ruyi() {
@@ -106,8 +111,8 @@ install_ruyi() {
 	APT_INSTALL "curl git tar bzip2 xz-utils zstd unzip"
 	PACMAN_INSTALL "curl git tar bzip2 xz zstd unzip"
 
-	#install_release_ruyi
-	install_github_release_ruyi
+	export_ruyi_link
+	ruyi_curl ruyi $ruyi_link
 
 	chmod +x ruyi
 	ln -s $(realpath ruyi) /usr/bin/ruyi

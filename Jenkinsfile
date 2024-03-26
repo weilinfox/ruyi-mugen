@@ -37,7 +37,7 @@ def mugen_install () {
 }
 
 def mugen_run () {
-    sh 'sudo bash mugen.sh -f ruyi -x | tee report_gen_tmpl/26test_log.md'
+    sh 'sudo bash mugen.sh -f ruyi -x 2>&1 | tee report_gen_tmpl/26test_log.md'
     sh "bash report_gen.sh ${DIRSTO}"
     sh 'sudo chown -R $USER:$USER ./* ./.*'
     sh 'sudo bash dep_install.sh -j'

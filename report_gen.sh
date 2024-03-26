@@ -70,7 +70,9 @@ export_ruyi_link
 cp ${tmpl_dir}/*.md ${tmpl_dir}/$1/*.md $temp_dir/
 
 
-cat `ls ${temp_dir} | sort` > $report_dir/my
+for f in `ls ${temp_dir} | sort`; do
+	cat ${temp_dir}/$f >> $report_dir/my
+done
 
 rm -rf $temp_dir
 

@@ -25,7 +25,7 @@ source ${OET_PATH}/testcases/cli-test/ruyi/common/common_lib.sh
 report_name_js='{
 "revyos-riscv64":	"RUYI_包管理_Container_RevyOS_riscv64_测试结果",
 "debian12-x86_64":	"RUYI_包管理_QEMU_Debian12_x86_64_测试结果",
-"debian12-aarch64":	"RUYI_包管理_QEMU_Debian12_riscv64_测试结果",
+"debian12-aarch64":	"RUYI_包管理_QEMU_Debian12_aarch64_测试结果",
 "debiansid-riscv64":	"RUYI_包管理_Container_Debiansid_riscv64_测试结果",
 "ubuntu2204-x86_64":	"RUYI_包管理_QEMU_Ubuntu22.04_x86_64_测试结果",
 "ubuntu2204-riscv64":	"RUYI_包管理_QEMU_Ubuntu22.04_riscv64_测试结果",

@@ -37,6 +37,7 @@ report_name_js='{
 "archlinux-riscv64":	"RUYI_包管理_Container_Archlinux_riscv64_测试结果"
 }'
 ruyitest_repo="https://gitee.com/yunxiangluo/ruyisdk-test/tree/master/20240312"
+ruyitest_repo_raw="https://gitee.com/yunxiangluo/ruyisdk-test/raw/master/20240312"
 
 tmpl_dir=${OET_PATH}/report_gen_tmpl
 temp_dir=/tmp/ruyi_report
@@ -82,6 +83,7 @@ sed -i "s/{{ruyi_arch}}/$arch/g" $report_dir/my
 sed -i "s/{{ruyi_version}}/$version/g" $report_dir/my
 sed -i "s|{{ruyi_link}}|$ruyi_link|g" $report_dir/my
 sed -i "s|{{ruyitest_repo}}|$ruyitest_repo|g" $report_dir/my
+sed -i "s|{{ruyitest_repo_raw}}|$ruyitest_repo_raw|g" $report_dir/my
 sed -i "s/{{ruyi_testsuites}}/$ruyi_testsuites/g" $report_dir/my
 sed -i "s/{{ruyi_testcases}}/$ruyi_testcases/g" $report_dir/my
 sed -i "s/{{ruyi_conclusion}}/$ruyi_conclusion/g" $report_dir/my

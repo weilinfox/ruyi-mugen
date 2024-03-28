@@ -93,7 +93,7 @@ export_release_ruyi_link() {
 }
 
 export_github_release_ruyi_link() {
-	version="0.8.0-alpha.20240325"
+	version="0.8.0-alpha.20240326"
 	arch='amd64'
 	local larch="$(uname -m)"
 	if [ "$larch"  == "riscv64" ]; then arch='riscv64'; fi
@@ -102,8 +102,8 @@ export_github_release_ruyi_link() {
 }
 
 export_ruyi_link() {
-	export_release_ruyi_link
-	#export_github_release_ruyi_link
+	#export_release_ruyi_link
+	export_github_release_ruyi_link
 }
 
 install_ruyi() {

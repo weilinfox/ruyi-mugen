@@ -39,6 +39,9 @@
         },
         {
             "name": "ruyi_test_binaries"
+        },
+        {
+            "name": "ruyi_test_gnu-plct_xiangshan-nanhu"
         }
     ]
 }

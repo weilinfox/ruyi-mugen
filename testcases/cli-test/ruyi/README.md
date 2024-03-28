@@ -13,6 +13,9 @@
 |  | ruyi\_test\_news | ``news`` 命令测试 |
 |  | ruyi\_test\_device | ``device`` 命令测试 |
 |  | ruyi\_test\_gnu-plct-rv64ilp32-elf | ``gnu-plct-rv64ilp32-elf`` 工具链测试 |
+|  | ruyi\_test\_config | config.toml 配置文件测试 |
+|  | ruyi\_test\_binaries | 工具链/虚拟机二进制测试 |
+|  | ruyi\_test\_gnu-plct\_xiangshan-nanhu | ``gnu-plct`` 工具链 xiangshan-nanhu 测试 |
 
 ## ruyi\_test\_common 基本命令测试
 
@@ -67,4 +70,8 @@ RUYI config.toml 配置文件测试
 ## ruyi\_test\_binaries 工具链/虚拟机二进制测试
 
 RUYI 工具链和虚拟机等二进制包测试，测试动态链接二进制是否有缺失的动态链接库。由于该测试只对 not found 报错，对于其他信息之作警告，测试后人工阅读日志是有必要的。
+
+## ruyi\_test\_gnu-plct\_xiangshan-nanhu gnu-plct 工具链 xiangshan-nanhu 测试
+
+gnu-plct 工具链 xiangshan-nanhu profile
 

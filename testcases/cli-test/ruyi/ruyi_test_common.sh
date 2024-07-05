@@ -31,15 +31,15 @@ function run_test() {
     local rv=$?
     CHECK_RESULT $rv 0 0 "Check ruyi version failed"
     if [[ "$rv"x != "0x" ]]; then
-         RUYI_DEBUG=x ruyi --version
+        RUYI_DEBUG=x ruyi --version
     fi
-    ruyi 2>&1 |grep usage
+    ruyi 2>&1 | grep usage
     CHECK_RESULT $? 0 0 "Check ruyi empty cmdline help failed"
     ruyi -h | grep usage
     CHECK_RESULT $? 0 0 "Check ruyi help failed"
     ruyi list
     CHECK_RESULT $? 0 0 "Check ruyi empty list failed"
-    [ -d $(get_ruyi_dir) ]
+    [ -d "$(get_ruyi_dir)" ]
     CHECK_RESULT $? 0 0 "Check ruyi create cache directory failed"
     ruyi update
     CHECK_RESULT $? 0 0 "Check ruyi update failed"
@@ -53,20 +53,20 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi list verbose artifacts failed"
     ruyi list --verbose | grep "Toolchain metadata"
     CHECK_RESULT $? 0 0 "Check ruyi list verbose metadata failed"
-
     ruyi list profiles
     CHECK_RESULT $? 0 0 "Check ruyi profile failed"
 
     pkgnames=$(ruyi list | grep -e "^* toolchain" | cut -d'/' -f 2)
     for p in $pkgnames; do
         s=$(ruyi list | awk '/\* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /\* toolchain\/'$p'/ {if (f==0) f=1}' | grep -e "^  -" | grep -v "no binary for current host")
-	v=$(ruyi list | awk '/\* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /\* toolchain\/'$p'/ {if (f==0) f=1}' | grep -e "^  -" | grep -v "no binary for current host" | grep -v prerelease | grep latest | cut -d' ' -f4)
-        if [ ! -z "$s" ] && [ ! -z "$v" ]; then
+        v=$(ruyi list | awk '/\* / {if (f==1) f=2} /./ {if (f==1) {print $0}} /\* toolchain\/'$p'/ {if (f==0) f=1}' | grep -e "^  -" | grep -v "no binary for current host" | grep -v prerelease | grep latest | cut -d' ' -f4)
+        if [ -n "$s" ] && [ -n "$v" ]; then
             pkgname="$p"
             pkgversion="$v"
             break
         fi
     done
+
     if [ -z "$pkgname" ]; then
         LOG_INFO "No supported binary package found"
     else
@@ -89,7 +89,7 @@ function run_test() {
     ruyi extract $pkgname
     CHECK_RESULT $? 0 0 "Check ruyi extract failed"
     [ "$(ls)" != "" ]
-    CHECK_RESULT $? 0 0 "Check ruyi extract dir not enpty failed"
+    CHECK_RESULT $? 0 0 "Check ruyi extract dir not empty failed"
     cd .. && rm -rf source-test
 
     ruyi self uninstall -y
@@ -125,4 +125,3 @@ function post_test() {
 }
 
 main "$@"
-

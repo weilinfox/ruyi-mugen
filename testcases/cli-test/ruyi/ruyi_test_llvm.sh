@@ -51,12 +51,12 @@ function run_test() {
     fi
     fi
 
-    ruyi install llvm-upstream gnu-plct $qemu_pkg
+    ruyi install llvm-upstream gnu-upstream $qemu_pkg
     CHECK_RESULT $? 0 0 "Check ruyi toolchain install failed"
-    ruyi venv -t llvm-upstream --sysroot-from gnu-plct $qemu_cmd generic venv
-    CHECK_RESULT $? 0 0 "Check ruyi venv creation failed"
+    ruyi venv -t llvm-upstream --sysroot-from gnu-upstream $qemu_cmd generic llvm-venv-gnu-upstream
+    CHECK_RESULT $? 0 0 "Check ruyi venv creation for llvm-upstream with gnu-upstream failed"
 
-    . venv/bin/ruyi-activate
+    . llvm-venv-gnu-upstream/bin/ruyi-activate
 
     cat > hello_ruyi.c << EOF
 #include <stdio.h>
@@ -75,6 +75,21 @@ EOF
     CHECK_RESULT $? 0 0 "Check ruyi binary failed"
 
     ruyi-deactivate
+
+    ruyi install llvm-upstream gnu-plct $qemu_pkg
+    CHECK_RESULT $? 0 0 "Check ruyi toolchain install failed"
+    ruyi venv -t llvm-upstream --sysroot-from gnu-plct $qemu_cmd generic llvm-venv-gnu-plct
+    CHECK_RESULT $? 0 0 "Check ruyi venv creation for llvm-upstream with gnu-plct failed"
+
+    . llvm-venv-gnu-plct/bin/ruyi-activate
+
+    clang -O3 hello_ruyi.c -o hello_ruyi.o
+    CHECK_RESULT $? 0 0 "Check ruyi llvm compilation failed"
+    $qemu_bin ./hello_ruyi.o | grep "hello, ruyi"
+    CHECK_RESULT $? 0 0 "Check ruyi binary failed"
+
+    ruyi-deactivate
+
     cd ..
     rm -rf llvm_test
 
@@ -88,4 +103,3 @@ function post_test() {
 }
 
 main "$@"
-

@@ -27,6 +27,7 @@ function pre_test() {
 function run_test() {
     LOG_INFO "Start to run test."
 
+    version=$(ruyi --version)
     ruyi --version | grep "$version"
     local rv=$?
     CHECK_RESULT $rv 0 0 "Check ruyi version failed"

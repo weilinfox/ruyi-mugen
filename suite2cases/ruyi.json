@@ -42,6 +42,9 @@
         },
         {
             "name": "ruyi_test_gnu-plct_xiangshan-nanhu"
+        },
+        {
+            "name": "ruyi_test_milkv-duo"
         }
     ]
 }

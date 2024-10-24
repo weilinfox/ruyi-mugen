@@ -34,6 +34,10 @@ function run_test() {
     CHECK_RESULT $? 0 0 "Check ruyi admin manifest json format failed"
     ruyi admin manifest --format toml $test_file
     CHECK_RESULT $? 0 0 "Check ruyi admin manifest toml format failed"
+    ruyi admin manifest --format toml $test_file >test.toml
+    ruyi admin format-manifest ./test.toml
+    CHECK_RESULT $? 0 0 "Check ruyi admin format-manifest toml format failed"
+    rm test.toml
 
     LOG_INFO "End of the test."
 }

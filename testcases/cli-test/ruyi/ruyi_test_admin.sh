@@ -28,13 +28,13 @@ function run_test() {
     LOG_INFO "Start to run test."
 
     test_file=ruyi_test_admin.sh
-    ruyi admin manifest $test_file
+    ruyi admin checksum $test_file
     CHECK_RESULT $? 0 0 "Check ruyi admin manifest failed"
-    ruyi admin manifest --format json $test_file
+    ruyi admin checksum --format json $test_file
     CHECK_RESULT $? 0 0 "Check ruyi admin manifest json format failed"
-    ruyi admin manifest --format toml $test_file
+    ruyi admin checksum --format toml $test_file
     CHECK_RESULT $? 0 0 "Check ruyi admin manifest toml format failed"
-    ruyi admin manifest --format toml $test_file >test.toml
+    ruyi admin checksum --format toml $test_file >test.toml
     ruyi admin format-manifest ./test.toml
     CHECK_RESULT $? 0 0 "Check ruyi admin format-manifest toml format failed"
     rm test.toml
